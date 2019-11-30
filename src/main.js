@@ -4,6 +4,20 @@ const render = (container, template, place = `beforeend`) => {
   container.insertAdjacentHTML(place, template);
 };
 
+const createRouteInfoTemplate = () => {
+  return (
+    `<div class="trip-info__main">
+    <h1 class="trip-info__title">Amsterdam &mdash; ... &mdash; Amsterdam</h1>
+
+    <p class="trip-info__dates">Mar 18&nbsp;&mdash;&nbsp;21</p>
+  </div>`
+  );
+};
+
+const routeInfoSection = document.querySelector(`.trip-main__trip-info`);
+
+render(routeInfoSection, createRouteInfoTemplate(), `afterbegin`);
+
 const createSiteMenuTemplate = () => {
   return (
     `<nav class="trip-controls__trip-tabs  trip-tabs">
@@ -42,9 +56,48 @@ const createSiteFilterTemplate = () => {
 
 render(tripMenu, createSiteFilterTemplate());
 
-const createAddEditEventForm = () => {
+const createSortFormTemplate = () => {
   return (
-    `<form class="trip-events__item  event  event--edit" action="#" method="post">
+    `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
+    <span class="trip-sort__item  trip-sort__item--day">Day</span>
+
+    <div class="trip-sort__item  trip-sort__item--event">
+      <input id="sort-event" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-event" checked>
+      <label class="trip-sort__btn" for="sort-event">Event</label>
+    </div>
+
+    <div class="trip-sort__item  trip-sort__item--time">
+      <input id="sort-time" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-time">
+      <label class="trip-sort__btn" for="sort-time">
+        Time
+        <svg class="trip-sort__direction-icon" width="8" height="10" viewBox="0 0 8 10">
+          <path d="M2.888 4.852V9.694H5.588V4.852L7.91 5.068L4.238 0.00999987L0.548 5.068L2.888 4.852Z"/>
+        </svg>
+      </label>
+    </div>
+
+    <div class="trip-sort__item  trip-sort__item--price">
+      <input id="sort-price" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-price">
+      <label class="trip-sort__btn" for="sort-price">
+        Price
+        <svg class="trip-sort__direction-icon" width="8" height="10" viewBox="0 0 8 10">
+          <path d="M2.888 4.852V9.694H5.588V4.852L7.91 5.068L4.238 0.00999987L0.548 5.068L2.888 4.852Z"/>
+        </svg>
+      </label>
+    </div>
+
+    <span class="trip-sort__item  trip-sort__item--offers">Offers</span>
+  </form>`
+  );
+};
+
+const tripEventsSection = document.querySelector(`.trip-events`);
+
+render(tripEventsSection, createSortFormTemplate());
+
+const createEventEditForm = () => {
+  return (
+    `                  <form class="event  event--edit" action="#" method="post">
     <header class="event__header">
       <div class="event__type-wrapper">
         <label class="event__type  event__type-btn" for="event-type-toggle-1">
@@ -118,12 +171,11 @@ const createAddEditEventForm = () => {
         <label class="event__label  event__type-output" for="event-destination-1">
           Sightseeing at
         </label>
-        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="" list="destination-list-1">
+        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="Saint Petersburg" list="destination-list-1">
         <datalist id="destination-list-1">
           <option value="Amsterdam"></option>
           <option value="Geneva"></option>
           <option value="Chamonix"></option>
-          <option value="Saint Petersburg"></option>
         </datalist>
       </div>
 
@@ -131,12 +183,12 @@ const createAddEditEventForm = () => {
         <label class="visually-hidden" for="event-start-time-1">
           From
         </label>
-        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="18/03/19 00:00">
+        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="18/03/19 12:25">
         &mdash;
         <label class="visually-hidden" for="event-end-time-1">
           To
         </label>
-        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="18/03/19 00:00">
+        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="18/03/19 13:35">
       </div>
 
       <div class="event__field-group  event__field-group--price">
@@ -144,41 +196,121 @@ const createAddEditEventForm = () => {
           <span class="visually-hidden">Price</span>
           &euro;
         </label>
-        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="">
+        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="160">
       </div>
 
       <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-      <button class="event__reset-btn" type="reset">Cancel</button>
+      <button class="event__reset-btn" type="reset">Delete</button>
+
+      <input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" checked>
+      <label class="event__favorite-btn" for="event-favorite-1">
+        <span class="visually-hidden">Add to favorite</span>
+        <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
+          <path d="M14 21l-8.22899 4.3262 1.57159-9.1631L.685209 9.67376 9.8855 8.33688 14 0l4.1145 8.33688 9.2003 1.33688-6.6574 6.48934 1.5716 9.1631L14 21z"/>
+        </svg>
+      </label>
+
+      <button class="event__rollup-btn" type="button">
+        <span class="visually-hidden">Open event</span>
+      </button>
     </header>
+
+    <section class="event__details">
+
+      <section class="event__section  event__section--offers">
+        <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+
+        <div class="event__available-offers">
+          <div class="event__offer-selector">
+            <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" checked>
+            <label class="event__offer-label" for="event-offer-luggage-1">
+              <span class="event__offer-title">Add luggage</span>
+              &plus;
+              &euro;&nbsp;<span class="event__offer-price">30</span>
+            </label>
+          </div>
+
+          <div class="event__offer-selector">
+            <input class="event__offer-checkbox  visually-hidden" id="event-offer-comfort-1" type="checkbox" name="event-offer-comfort" checked>
+            <label class="event__offer-label" for="event-offer-comfort-1">
+              <span class="event__offer-title">Switch to comfort class</span>
+              &plus;
+              &euro;&nbsp;<span class="event__offer-price">100</span>
+            </label>
+          </div>
+
+          <div class="event__offer-selector">
+            <input class="event__offer-checkbox  visually-hidden" id="event-offer-meal-1" type="checkbox" name="event-offer-meal">
+            <label class="event__offer-label" for="event-offer-meal-1">
+              <span class="event__offer-title">Add meal</span>
+              &plus;
+              &euro;&nbsp;<span class="event__offer-price">15</span>
+            </label>
+          </div>
+
+          <div class="event__offer-selector">
+            <input class="event__offer-checkbox  visually-hidden" id="event-offer-seats-1" type="checkbox" name="event-offer-seats">
+            <label class="event__offer-label" for="event-offer-seats-1">
+              <span class="event__offer-title">Choose seats</span>
+              &plus;
+              &euro;&nbsp;<span class="event__offer-price">5</span>
+            </label>
+          </div>
+
+          <div class="event__offer-selector">
+            <input class="event__offer-checkbox  visually-hidden" id="event-offer-train-1" type="checkbox" name="event-offer-train">
+            <label class="event__offer-label" for="event-offer-train-1">
+              <span class="event__offer-title">Travel by train</span>
+              &plus;
+              &euro;&nbsp;<span class="event__offer-price">40</span>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <section class="event__section  event__section--destination">
+        <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+        <p class="event__destination-description">Geneva is a city in Switzerland that lies at the southern tip of expansive Lac Léman (Lake Geneva). Surrounded by the Alps and Jura mountains, the city has views of dramatic Mont Blanc.</p>
+
+        <div class="event__photos-container">
+          <div class="event__photos-tape">
+            <img class="event__photo" src="img/photos/1.jpg" alt="Event photo">
+            <img class="event__photo" src="img/photos/2.jpg" alt="Event photo">
+            <img class="event__photo" src="img/photos/3.jpg" alt="Event photo">
+            <img class="event__photo" src="img/photos/4.jpg" alt="Event photo">
+            <img class="event__photo" src="img/photos/5.jpg" alt="Event photo">
+          </div>
+        </div>
+      </section>
+    </section>
   </form>`
   );
 };
 
+render(tripEventsSection, createEventEditForm());
+
 const createTripDaysList = () => {
   return (
     `<ul class="trip-days">
+    <li class="trip-days__item  day">
+      <div class="day__info">
+        <span class="day__counter">1</span>
+        <time class="day__date" datetime="2019-03-18">MAR 18</time>
+      </div>
+      <ul class="trip-events__list">
+      </ul>
+    </li>
   </ul>`
   );
 };
 
-const tripEventsSection = document.querySelector(`.trip-events`);
-
-render(tripEventsSection, createAddEditEventForm());
-
 render(tripEventsSection, createTripDaysList());
 
-const tripList = tripEventsSection.querySelector(`.trip-days`);
+const tripList = tripEventsSection.querySelector(`.trip-events__list`);
 
 const createTripDayListItem = () => {
   return (
-    `<li class="trip-days__item  day">
-    <div class="day__info">
-      <span class="day__counter">1</span>
-      <time class="day__date" datetime="2019-03-18">MAR 18</time>
-    </div>
-
-    <ul class="trip-events__list">
-      <li class="trip-events__item">
+    `<li class="trip-events__item">
         <div class="event">
           <div class="event__type">
             <img class="event__type-icon" width="42" height="42" src="img/icons/taxi.png" alt="Event type icon">
@@ -211,46 +343,6 @@ const createTripDayListItem = () => {
             <span class="visually-hidden">Open event</span>
           </button>
         </div>
-      </li>
-
-      <li class="trip-events__item">
-        <div class="event">
-          <div class="event__type">
-            <img class="event__type-icon" width="42" height="42" src="img/icons/flight.png" alt="Event type icon">
-          </div>
-          <h3 class="event__title">Flight to Geneva</h3>
-
-          <div class="event__schedule">
-            <p class="event__time">
-              <time class="event__start-time" datetime="2019-03-18T12:25">12:25</time>
-              &mdash;
-              <time class="event__end-time" datetime="2019-03-18T13:35">13:35</time>
-            </p>
-            <p class="event__duration">1H 30M</p>
-          </div>
-
-          <p class="event__price">
-            &euro;&nbsp;<span class="event__price-value">160</span>
-          </p>
-
-          <h4 class="visually-hidden">Offers:</h4>
-          <ul class="event__selected-offers">
-            <li class="event__offer">
-              <span class="event__offer-title">Add luggage</span>
-              &plus;
-              &euro;&nbsp;<span class="event__offer-price">50</span>
-             </li>
-             <li class="event__offer">
-               <span class="event__offer-title">Switch to comfort</span>
-               &plus;
-               &euro;&nbsp;<span class="event__offer-price">80</span>
-              </li>
-          </ul>
-
-          <button class="event__rollup-btn" type="button">
-            <span class="visually-hidden">Open event</span>
-          </button>
-        </div>
       </li>`
   );
 };
@@ -260,25 +352,3 @@ new Array(CARD_COUNT)
   .forEach(
       () => render(tripList, createTripDayListItem())
   );
-
-const createRouteStatistic = () => {
-  return (
-    `<section class="statistics">
-    <h2 class="visually-hidden">Trip statistics</h2>
-
-    <div class="statistics__item statistics__item--money">
-      <canvas class="statistics__chart  statistics__chart--money" width="900"></canvas>
-    </div>
-
-    <div class="statistics__item statistics__item--transport">
-      <canvas class="statistics__chart  statistics__chart--transport" width="900"></canvas>
-    </div>
-
-    <div class="statistics__item statistics__item--time-spend">
-      <canvas class="statistics__chart  statistics__chart--time" width="900"></canvas>
-    </div>
-  </section>`
-  );
-};
-
-render(tripEventsSection, createRouteStatistic(), `afterend`);
