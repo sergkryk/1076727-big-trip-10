@@ -13,11 +13,6 @@ const createRouteInfoTemplate = () => {
   </div>`
   );
 };
-
-const routeInfoSection = document.querySelector(`.trip-main__trip-info`);
-
-render(routeInfoSection, createRouteInfoTemplate(), `afterbegin`);
-
 const createSiteMenuTemplate = () => {
   return (
     `<nav class="trip-controls__trip-tabs  trip-tabs">
@@ -26,12 +21,7 @@ const createSiteMenuTemplate = () => {
   </nav>`
   );
 };
-
-const tripMenu = document.querySelector(`.trip-main__trip-controls`);
-
-render(tripMenu, createSiteMenuTemplate());
-
-const createSiteFilterTemplate = () => {
+const createFilterFormTemplate = () => {
   return (
     `<form class="trip-filters" action="#" method="get">
     <div class="trip-filters__filter">
@@ -53,9 +43,6 @@ const createSiteFilterTemplate = () => {
   </form>`
   );
 };
-
-render(tripMenu, createSiteFilterTemplate());
-
 const createSortFormTemplate = () => {
   return (
     `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
@@ -90,12 +77,7 @@ const createSortFormTemplate = () => {
   </form>`
   );
 };
-
-const tripEventsSection = document.querySelector(`.trip-events`);
-
-render(tripEventsSection, createSortFormTemplate());
-
-const createEventEditForm = () => {
+const createEventEditFormTemplate = () => {
   return (
     `                  <form class="event  event--edit" action="#" method="post">
     <header class="event__header">
@@ -286,29 +268,25 @@ const createEventEditForm = () => {
   </form>`
   );
 };
-
-render(tripEventsSection, createEventEditForm());
-
-const createTripDaysList = () => {
+const createDayListTemplate = () => {
   return (
     `<ul class="trip-days">
-    <li class="trip-days__item  day">
-      <div class="day__info">
-        <span class="day__counter">1</span>
-        <time class="day__date" datetime="2019-03-18">MAR 18</time>
-      </div>
-      <ul class="trip-events__list">
-      </ul>
-    </li>
   </ul>`
   );
 };
-
-render(tripEventsSection, createTripDaysList());
-
-const tripList = tripEventsSection.querySelector(`.trip-events__list`);
-
-const createTripDayListItem = () => {
+const createDayListItemTemplate = () => {
+  return (
+    `<li class="trip-days__item  day">
+    <div class="day__info">
+      <span class="day__counter">1</span>
+      <time class="day__date" datetime="2019-03-18">MAR 18</time>
+    </div>
+    <ul class="trip-events__list">
+    </ul>
+  </li>`
+  );
+};
+const createEventsListItemTemplate = () => {
   return (
     `<li class="trip-events__item">
         <div class="event">
@@ -347,8 +325,23 @@ const createTripDayListItem = () => {
   );
 };
 
+const routeInfoSection = document.querySelector(`.trip-main__trip-info`);
+const tripMenu = document.querySelector(`.trip-main__trip-controls`);
+const tripEventsSection = document.querySelector(`.trip-events`);
+
+render(routeInfoSection, createRouteInfoTemplate(), `afterbegin`);
+render(tripMenu, createSiteMenuTemplate());
+render(tripMenu, createFilterFormTemplate());
+render(tripEventsSection, createSortFormTemplate());
+render(tripEventsSection, createEventEditFormTemplate());
+render(tripEventsSection, createDayListTemplate());
+
+const tripDaysList = document.querySelector(`.trip-days`);
+render(tripDaysList, createDayListItemTemplate());
+
+const tripEvents = tripEventsSection.querySelector(`.trip-events__list`);
 new Array(CARD_COUNT)
   .fill(``)
   .forEach(
-      () => render(tripList, createTripDayListItem())
+      () => render(tripEvents, createEventsListItemTemplate())
   );
