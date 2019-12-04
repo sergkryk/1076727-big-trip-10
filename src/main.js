@@ -7,7 +7,7 @@ import {createDayListTemplate} from './components/days-list.js';
 import {createDayListItemTemplate} from './components/events-list.js';
 import {createEventsListItemTemplate} from './components/event.js';
 
-const CARD_COUNT = 3;
+const CARD_COUNT = 4;
 
 const render = (container, template, place = `beforeend`) => {
   container.insertAdjacentHTML(place, template);
@@ -21,7 +21,6 @@ render(routeInfoSection, createRouteInfoTemplate(), `afterbegin`);
 render(tripMenu, createSiteMenuTemplate());
 render(tripMenu, createFilterFormTemplate());
 render(tripEventsSection, createSortFormTemplate());
-render(tripEventsSection, createEventEditFormTemplate());
 render(tripEventsSection, createDayListTemplate());
 
 const tripDaysList = document.querySelector(`.trip-days`);
@@ -33,3 +32,5 @@ new Array(CARD_COUNT)
   .forEach(
       () => render(tripEvents, createEventsListItemTemplate())
   );
+const eventItem = tripEvents.querySelector(`.trip-events__item`);
+eventItem.innerHTML = createEventEditFormTemplate();
