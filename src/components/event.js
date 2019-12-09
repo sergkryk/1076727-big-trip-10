@@ -1,4 +1,4 @@
-import {formatTime, formatDate, formatDuration} from '../utils.js';
+import {formatTime, formatDuration} from '../utils.js';
 
 const OFFERS_MAX_VIEWING = 3;
 
