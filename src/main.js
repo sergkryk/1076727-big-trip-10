@@ -4,21 +4,11 @@ import {createFilterFormTemplate} from './components/filter.js';
 import {createSortFormTemplate} from './components/sort.js';
 import {createEventEditTemplate} from './components/event-edit.js';
 import {createTripDaysListTemplate} from './components/trip-days-list.js';
+import {createTripDayTemplate} from './components/day.js';
 import {createEventsListItemTemplate} from './components/event.js';
 import {render} from './utils.js';
 import {FILTERS, MENU_ITEMS} from './const.js';
-import {generateEvents} from './mock/mock.js';
-
-const EVENTS_COUNT = 4;
-
-const events = generateEvents(EVENTS_COUNT);
-
-const getEvents = () => {
-  return events
-    .slice(1, EVENTS_COUNT)
-    .map((event) => createEventsListItemTemplate(event))
-    .join(``);
-};
+import {events, dates} from './mock/mock.js';
 
 const tripInfo = document.querySelector(`.trip-main__trip-info`);
 const tripMenu = document.querySelector(`.trip-main__trip-controls`);
@@ -30,11 +20,23 @@ render(tripMenu, createFilterFormTemplate(FILTERS));
 render(tripEvents, createSortFormTemplate());
 render(tripEvents, createTripDaysListTemplate());
 
-const tripDay = document.querySelector(`.trip-days__item`);
-const tripEventsList = tripDay.querySelector(`.trip-events__list`);
+const tripDaysList = document.querySelector(`.trip-days`);
 
-render(tripEventsList, createEventEditTemplate(events[0]));
-render(tripEventsList, getEvents());
+dates.forEach((date, dateIndex) => {
+  const day = new Date(date);
+  render(tripDaysList, createTripDayTemplate(day, dateIndex));
+  const list = document.querySelectorAll(`.trip-events__list`);
+
+  events
+  .filter((_event) => new Date(_event.startDate).toDateString() === date)
+  .forEach((_event, eventIndex) => {
+    render(
+        list[dateIndex],
+        eventIndex === 0 && dateIndex === 0 ? createEventEditTemplate(_event) : createEventsListItemTemplate(_event)
+    );
+  });
+});
 
 const tripCost = events.reduce((acc, value) => acc + value.price, 0);
 tripInfo.querySelector(`.trip-info__cost-value`).textContent = tripCost;
+

@@ -1,4 +1,4 @@
-import {formatTime, formatDuration} from '../utils.js';
+import {formatTime, formatDate, formatDuration} from '../utils.js';
 
 const OFFERS_MAX_VIEWING = 3;
 
@@ -7,10 +7,7 @@ const createOffersMarkup = (offers) => {
   return offers
     .slice(OFFERS_MAX_VIEWING)
     .map((offer) => {
-      const {
-        title,
-        price
-      } = offer;
+      const {title, price} = offer;
       return `
         <li class="event__offer">
           <span class="event__offer-title">${title}</span>
@@ -39,9 +36,9 @@ const createEventsListItemTemplate = (event) => {
         <h3 class="event__title">${type} to ${city}</h3>
         <div class="event__schedule">
           <p class="event__time">
-            <time class="event__start-time" datetime="2019-03-18T10:30">${startTime}</time>
+            <time class="event__start-time" datetime="${startDate}">${startTime}</time>
             &mdash;
-            <time class="event__end-time" datetime="2019-03-18T11:00">${endTime}</time>
+            <time class="event__end-time" datetime="${endDate}">${endTime}</time>
           </p>
           <p class="event__duration">${duration}</p>
         </div>

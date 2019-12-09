@@ -15,14 +15,13 @@ const getRandomArrayItem = (array) => {
 };
 
 const getRandomDate = () => {
-  const targetDate = new Date();
-  const sign = Math.random() > 0.5 ? 1 : -1;
-  const diffValue = sign * getRandomIntegerNumber(0, 7);
-
-  targetDate.setDate(targetDate.getDate() + diffValue);
-
-  return targetDate;
+  return (
+    Date.now() +
+      1 +
+      Math.floor(Math.random() * 7) * 24 * getRandomIntegerNumber(0, 60) * 60 * 1000
+  );
 };
+
 
 const shuffleArray = (array) => {
   for (let i = array.length - 1; i > 0; i--) {

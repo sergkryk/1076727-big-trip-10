@@ -4,11 +4,7 @@ import {EVENT_TYPES, CITIES} from '../const.js';
 const createOffersMarkup = (offers) => {
   return offers
     .map((offer) => {
-      const {
-        type,
-        title,
-        price
-      } = offer;
+      const {type, title, price} = offer;
 
       return `
         <div class="event__offer-selector">

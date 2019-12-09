@@ -1,9 +1,7 @@
-import {createTripDayTemplate} from './day.js';
+// import {createTripDayTemplate} from './day.js';
 
 export const createTripDaysListTemplate = () => {
   return (
-    `<ul class="trip-days">
-    ${createTripDayTemplate()}
-  </ul>`
+    `<ul class="trip-days"></ul>`
   );
 };
