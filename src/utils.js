@@ -1,5 +1,17 @@
+import {MONTH_NAMES} from './const.js';
+
 const render = (container, component, position = `beforeend`) => {
   container.insertAdjacentHTML(position, component);
+};
+
+const renderElement = (container, element) => {
+  container.appendChild(element);
+};
+
+const createElement = (template) => {
+  const element = document.createElement(`div`);
+  element.innerHTML = template;
+  return element.firstChild;
 };
 
 const getRandomBool = () => Math.random() > 0.5;
@@ -68,6 +80,10 @@ const formatDuration = (time) => {
   return `${hours > 0 ? `${hours}H` : ``} ${minutes}M`;
 };
 
+const convertMonthToString = (index) => {
+  return MONTH_NAMES[index];
+};
+
 export {
   render,
   getRandomBool,
@@ -77,6 +93,9 @@ export {
   shuffleArray,
   formatDate,
   formatTime,
-  formatDuration
+  formatDuration,
+  convertMonthToString,
+  createElement,
+  renderElement
 };
 
