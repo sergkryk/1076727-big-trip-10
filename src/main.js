@@ -23,18 +23,24 @@ render(tripEvents, createTripDaysListTemplate());
 const tripDaysList = document.querySelector(`.trip-days`);
 
 dates.forEach((date, dateIndex) => {
-  const day = new Date(date);
-  render(tripDaysList, createTripDayTemplate(day, dateIndex));
-  const list = document.querySelectorAll(`.trip-events__list`);
+  const day = document.createElement(`li`);
+  render(day, createTripDayTemplate(date, dateIndex));
 
   events
   .filter((_event) => new Date(_event.startDate).toDateString() === date)
   .forEach((_event, eventIndex) => {
     render(
-        list[dateIndex],
+        day.querySelector(`.trip-events__list`),
         eventIndex === 0 && dateIndex === 0 ? createEventEditTemplate(_event) : createEventsListItemTemplate(_event)
     );
   });
+
+  // затупил на этом шаге т.к. функция рендер вставляла в разметку просто обьекты
+  // нашел такое решение и хотел оставить его
+  // tripDaysList.insertAdjacentElement(`beforeend`, day); ВОПРОС: такой вариант ты бы зарубил?
+  // затем с помощью твоего видео пришел к такому варианту ==>
+
+  render(tripDaysList, day.innerHTML);
 });
 
 const tripCost = events.reduce((acc, value) => acc + value.price, 0);
