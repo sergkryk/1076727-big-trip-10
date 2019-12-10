@@ -38,6 +38,7 @@ dates.forEach((date, dateIndex) => {
   // затупил на этом шаге т.к. функция рендер вставляла в разметку просто обьекты
   // нашел такое решение и хотел оставить его
   // tripDaysList.insertAdjacentElement(`beforeend`, day); ВОПРОС: такой вариант ты бы зарубил?
+  // tripDaysList.appendChild(day); или такой?
   // затем с помощью твоего видео пришел к такому варианту ==>
 
   render(tripDaysList, day.innerHTML);
