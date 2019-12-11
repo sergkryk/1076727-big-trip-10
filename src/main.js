@@ -2,7 +2,6 @@ import TripInfoComponent from './components/trip-info.js';
 import SiteMenuComponent from './components/menu.js';
 import FilterFormComponent from './components/filter.js';
 import SortFormComponent from './components/sort.js';
-import EventEditComponent from './components/event-edit.js';
 import TripDaysListComponent from './components/trip-days-list.js';
 import TripDayComponent from './components/day.js';
 import EventComponent from './components/event.js';
@@ -28,10 +27,8 @@ dates.forEach((date, dateIndex) => {
 
   events
   .filter((_event) => new Date(_event.startDate).toDateString() === date)
-  .forEach((_event, eventIndex) => {
-    const eventEdit = new EventEditComponent(_event).getElement();
-    const event = new EventComponent(_event).getElement();
-    render(eventsList, event, RenderPosition.BEFOREEND);
+  .forEach((_event) => {
+    render(eventsList, new EventComponent(_event).getElement(), RenderPosition.BEFOREEND);
   });
 
   render(tripDaysList, day, RenderPosition.BEFOREEND);
@@ -39,5 +36,3 @@ dates.forEach((date, dateIndex) => {
 
 const tripCost = events.reduce((acc, value) => acc + value.price, 0);
 tripInfo.querySelector(`.trip-info__cost-value`).textContent = tripCost;
-
-// eventIndex === 0 && dateIndex === 0 ? new EventEditComponent(_event).getElement() : new EventComponent(_event).getElement(),
