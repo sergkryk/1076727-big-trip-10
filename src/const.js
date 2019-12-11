@@ -1,20 +1,5 @@
 const EVENTS_COUNT = 10;
 
-const MONTH_NAMES = [
-  `JAN`,
-  `FEB`,
-  `MAR`,
-  `APR`,
-  `MAY`,
-  `JUN`,
-  `JUL`,
-  `AUG`,
-  `SEP`,
-  `OCT`,
-  `NOV`,
-  `DEC`,
-];
-
 const EVENT_TYPES = {
   transfers: [
     `bus`,
@@ -94,4 +79,4 @@ const DESCRIPTIONS = [
 ];
 
 
-export {EVENT_TYPES, CITIES, OFFERS, FILTERS, MENU_ITEMS, DESCRIPTIONS, EVENTS_COUNT, MONTH_NAMES};
+export {EVENT_TYPES, CITIES, OFFERS, FILTERS, MENU_ITEMS, DESCRIPTIONS, EVENTS_COUNT};

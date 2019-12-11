@@ -1,4 +1,5 @@
-import {formatTime, formatDuration} from '../utils.js';
+import {formatTime, formatDuration, replaceElement, createElement} from '../utils.js';
+import EventEditComponent from './event-edit.js';
 
 const OFFERS_MAX_VIEWING = 3;
 
@@ -57,6 +58,28 @@ const createEventsListItemTemplate = (event) => {
   `;
 };
 
-export {
-  createEventsListItemTemplate
-};
+export default class Event {
+  constructor(event) {
+    this._event = event;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createEventsListItemTemplate(this._event);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+      this._element.querySelector(`.event__rollup-btn`).addEventListener(`click`, () => {
+        replaceElement(this._element.parentElement, new EventEditComponent(this._event).getElement(), this._element);
+      });
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

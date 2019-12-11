@@ -1,3 +1,5 @@
+import {createElement} from '../utils.js';
+
 const SHOWING_CITIES_COUNT = 3;
 
 const getTitle = (events) => {
@@ -23,9 +25,8 @@ const getDates = (startDate, endDate) => {
 };
 
 
-export const createTripInfoTemplate = (events) => {
-  return `
-    <div class="trip-info__main">
+const createTripInfoTemplate = (events) => {
+  return `<div class="trip-info__main">
     <h1 class="trip-info__title">
       ${getTitle(events)}
     </h1>
@@ -33,3 +34,26 @@ export const createTripInfoTemplate = (events) => {
   </div>
   `;
 };
+
+export default class TripInfo {
+  constructor(events) {
+    this._events = events;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createTripInfoTemplate(this._events);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
