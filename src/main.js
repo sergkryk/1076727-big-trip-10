@@ -5,7 +5,8 @@ import SortFormComponent from './components/sort.js';
 import TripDaysListComponent from './components/trip-days-list.js';
 import TripDayComponent from './components/day.js';
 import EventComponent from './components/event.js';
-import {render, RenderPosition} from './utils.js';
+import EventEditComponent from './components/event-edit.js';
+import {render, RenderPosition, replaceElement} from './utils.js';
 import {FILTERS, MENU_ITEMS} from './const.js';
 import {events, dates} from './mock/mock.js';
 
@@ -28,7 +29,17 @@ dates.forEach((date, dateIndex) => {
   events
   .filter((_event) => new Date(_event.startDate).toDateString() === date)
   .forEach((_event) => {
-    render(eventsList, new EventComponent(_event).getElement(), RenderPosition.BEFOREEND);
+    const event = new EventComponent(_event).getElement();
+    const edit = new EventEditComponent(_event).getElement();
+    edit.querySelector(`.event--edit`).addEventListener(`submit`, (evt) => {
+      evt.preventDefault();
+      replaceElement(edit.parentElement, event, edit);
+    });
+    event.querySelector(`.event__rollup-btn`).addEventListener(`click`, () => {
+      replaceElement(event.parentElement, edit, event);
+    });
+    render(eventsList, event, RenderPosition.BEFOREEND);
+
   });
 
   render(tripDaysList, day, RenderPosition.BEFOREEND);

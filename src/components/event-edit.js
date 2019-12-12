@@ -1,6 +1,5 @@
-import {getRandomBool, formatDate, formatTime, replaceElement, createElement} from '../utils.js';
+import {getRandomBool, formatDate, formatTime, createElement} from '../utils.js';
 import {EVENT_TYPES, CITIES} from '../const.js';
-import EventComponent from './event.js';
 
 const createOffersMarkup = (offers) => {
   return offers
@@ -157,10 +156,6 @@ export default class EventEdit {
   getElement() {
     if (!this._element) {
       this._element = createElement(this.getTemplate());
-      this._element.querySelector(`.event--edit`).addEventListener(`submit`, (evt) => {
-        evt.preventDefault();
-        replaceElement(this._element.parentElement, new EventComponent(this._event).getElement(), this._element);
-      });
     }
 
     return this._element;
