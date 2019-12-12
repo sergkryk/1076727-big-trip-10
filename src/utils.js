@@ -1,11 +1,21 @@
-import {MONTH_NAMES} from './const.js';
-
-const render = (container, component, position = `beforeend`) => {
-  container.insertAdjacentHTML(position, component);
+export const RenderPosition = {
+  AFTERBEGIN: `afterbegin`,
+  BEFOREEND: `beforeend`
 };
 
-const renderElement = (container, element) => {
-  container.appendChild(element);
+const replaceElement = (parent, newChild, oldChild) => {
+  parent.replaceChild(newChild, oldChild);
+};
+
+const render = (container, element, place) => {
+  switch (place) {
+    case RenderPosition.AFTERBEGIN:
+      container.prepend(element);
+      break;
+    case RenderPosition.BEFOREEND:
+      container.append(element);
+      break;
+  }
 };
 
 const createElement = (template) => {
@@ -80,10 +90,6 @@ const formatDuration = (time) => {
   return `${hours > 0 ? `${hours}H` : ``} ${minutes}M`;
 };
 
-const convertMonthToString = (index) => {
-  return MONTH_NAMES[index];
-};
-
 export {
   render,
   getRandomBool,
@@ -94,8 +100,7 @@ export {
   formatDate,
   formatTime,
   formatDuration,
-  convertMonthToString,
   createElement,
-  renderElement
+  replaceElement
 };
 
