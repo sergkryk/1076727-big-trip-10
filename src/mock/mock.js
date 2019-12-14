@@ -1,6 +1,5 @@
 import {getRandomArrayItem, getRandomIntegerNumber, getRandomDate, shuffleArray} from '../utils.js';
 import {EVENT_TYPES, CITIES, OFFERS, DESCRIPTIONS, EVENTS_COUNT} from '../const.js';
-// import {createEventsListItemTemplate} from '../components/event.js';
 
 const generatePhotos = () => {
   const count = getRandomIntegerNumber(1, 6);
@@ -34,7 +33,8 @@ const generateEvent = () => {
     description: generateDescription(DESCRIPTIONS),
     startDate: Math.min(firstDate, secondDate),
     endDate: Math.max(firstDate, secondDate),
-    price: getRandomIntegerNumber(10, 200)
+    price: getRandomIntegerNumber(10, 200),
+    isArchived: Math.random() > 0.5
   };
 };
 
@@ -45,13 +45,6 @@ const generateEvents = (count) => {
 };
 
 const events = generateEvents(EVENTS_COUNT);
-
-// const renderEvents = () => {
-//   return events
-//     .slice(1, EVENTS_COUNT)
-//     .map((event) => createEventsListItemTemplate(event))
-//     .join(``);
-// };
 
 const dates = [...new Set(events.map((item) => new Date(item.startDate).toDateString()))];
 

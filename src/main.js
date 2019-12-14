@@ -20,7 +20,11 @@ render(tripMenu, new SiteMenuComponent(MENU_ITEMS).getElement(), RenderPosition.
 render(tripMenu, new FilterFormComponent(FILTERS).getElement(), RenderPosition.BEFOREEND);
 render(tripInfo, new TripInfoComponent(events).getElement(), RenderPosition.AFTERBEGIN);
 
-if (events.length > 0) {
+const isAllEventsArchived = events.every((element) => element.isArchived);
+
+if (isAllEventsArchived) {
+  render(mainContainer, new NoEventsComponent().getElement(), RenderPosition.AFTERBEGIN);
+} else {
   render(tripEvents, new SortFormComponent().getElement(), RenderPosition.BEFOREEND);
   render(tripEvents, new TripDaysListComponent().getElement(), RenderPosition.BEFOREEND);
 
@@ -61,8 +65,6 @@ if (events.length > 0) {
 
     render(tripDaysList, day, RenderPosition.BEFOREEND);
   });
-} else {
-  render(mainContainer, new NoEventsComponent().getElement(), RenderPosition.AFTERBEGIN);
 }
 
 const tripCost = events.reduce((acc, value) => acc + value.price, 0);

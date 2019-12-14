@@ -1,4 +1,4 @@
-const EVENTS_COUNT = 0;
+const EVENTS_COUNT = 10;
 
 const EVENT_TYPES = {
   transfers: [
