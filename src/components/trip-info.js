@@ -26,13 +26,22 @@ const getDates = (startDate, endDate) => {
 
 
 const createTripInfoTemplate = (events) => {
-  return `<div class="trip-info__main">
+  if (events.length > 0) {
+    return `<div class="trip-info__main">
     <h1 class="trip-info__title">
       ${getTitle(events)}
     </h1>
     <p class="trip-info__dates">${getDates(events[0].startDate, events[events.length - 1].endDate)}</p>
   </div>
   `;
+  } else {
+    return `<div class="trip-info__main">
+    <h1 class="trip-info__title">
+    </h1>
+    <p class="trip-info__dates">No events ahead</p>
+  </div>
+  `;
+  }
 };
 
 export default class TripInfo {
