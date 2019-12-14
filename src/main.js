@@ -37,6 +37,14 @@ dates.forEach((date, dateIndex) => {
     });
     event.querySelector(`.event__rollup-btn`).addEventListener(`click`, () => {
       replaceElement(event.parentElement, edit, event);
+      const onEscPress = (evt) => {
+        const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
+        if (isEscKey) {
+          replaceElement(edit.parentElement, event, edit);
+          document.removeEventListener(`keydown`, onEscPress);
+        }
+      };
+      document.addEventListener(`keydown`, onEscPress);
     });
     render(eventsList, event, RenderPosition.BEFOREEND);
 
