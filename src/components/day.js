@@ -1,6 +1,6 @@
 import {createElement} from '../utils.js';
 
-export const createTripDayTemplate = (date, index) => {
+const createTripDayTemplate = (date, index) => {
   const day = new Date(date);
   const month = day.toLocaleString(`en`, {month: `short`});
   return `<li class="trip-days__item  day">
