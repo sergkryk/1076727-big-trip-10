@@ -31,16 +31,19 @@ dates.forEach((date, dateIndex) => {
   .forEach((_event) => {
     const event = new EventComponent(_event).getElement();
     const edit = new EventEditComponent(_event).getElement();
+    const replaceEditElement = () => {
+      replaceElement(edit.parentElement, event, edit);
+    };
     edit.querySelector(`.event--edit`).addEventListener(`submit`, (evt) => {
       evt.preventDefault();
-      replaceElement(edit.parentElement, event, edit);
+      replaceEditElement();
     });
     event.querySelector(`.event__rollup-btn`).addEventListener(`click`, () => {
       replaceElement(event.parentElement, edit, event);
       const onEscPress = (evt) => {
         const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
         if (isEscKey) {
-          replaceElement(edit.parentElement, event, edit);
+          replaceEditElement();
           document.removeEventListener(`keydown`, onEscPress);
         }
       };
