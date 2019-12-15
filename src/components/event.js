@@ -1,4 +1,5 @@
 import {formatTime, formatDuration, createElement} from '../utils.js';
+import AbstractComponent from './abstract-component.js';
 
 
 const OFFERS_MAX_VIEWING = 3;
@@ -58,25 +59,18 @@ const createEventsListItemTemplate = (event) => {
   `;
 };
 
-export default class Event {
+export default class Event extends AbstractComponent {
   constructor(event) {
+    super();
     this._event = event;
-    this._element = null;
   }
 
   getTemplate() {
     return createEventsListItemTemplate(this._event);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
+  setRollUpButtonClickHandler(handler) {
+    this.getElement().querySelector(`.event__rollup-btn`)
+      .addEventListener(`click`, handler);
   }
 }

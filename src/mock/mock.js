@@ -48,7 +48,10 @@ const events = generateEvents(EVENTS_COUNT);
 
 const dates = [...new Set(events.map((item) => new Date(item.startDate).toDateString()))];
 
+const isAllEventsArchived = events.every((element) => element.isArchived);
+
 export {
   events,
-  dates
+  dates,
+  isAllEventsArchived
 };

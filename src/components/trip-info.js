@@ -1,4 +1,5 @@
-import {createElement} from '../utils.js';
+import AbstractComponent from './abstract-component.js';
+import {isAllEventsArchived} from '../mock/mock.js';
 
 const SHOWING_CITIES_COUNT = 3;
 
@@ -26,7 +27,7 @@ const getDates = (startDate, endDate) => {
 
 
 const createTripInfoTemplate = (events) => {
-  if (events.length > 0) {
+  if (!isAllEventsArchived) {
     return `<div class="trip-info__main">
     <h1 class="trip-info__title">
       ${getTitle(events)}
@@ -44,25 +45,13 @@ const createTripInfoTemplate = (events) => {
   }
 };
 
-export default class TripInfo {
+export default class TripInfo extends AbstractComponent {
   constructor(events) {
+    super();
     this._events = events;
-    this._element = null;
   }
 
   getTemplate() {
     return createTripInfoTemplate(this._events);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
