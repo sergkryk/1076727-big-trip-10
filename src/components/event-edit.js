@@ -1,4 +1,4 @@
-import {getRandomBool, formatDate, formatTime, createElement} from '../utils.js';
+import {getRandomBool, formatDate, formatTime} from '../utils.js';
 import {EVENT_TYPES, CITIES} from '../const.js';
 import AbstractComponent from './abstract-component.js';
 
