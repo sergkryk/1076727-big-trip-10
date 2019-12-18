@@ -17,12 +17,14 @@ export default class TripController {
     const mainContainer = document.querySelector(`.page-main`);
     if (isAllEventsArchived) {
       render(mainContainer, this._noEventsComponent, RenderPosition.AFTERBEGIN);
-    } else {
-      const tripDaysList = document.querySelector(`.trip-days`);
-      dates.forEach((date, dateIndex) => {
-        const day = new TripDayComponent(date, dateIndex);
-        const eventsList = day.getElement().querySelector(`.trip-events__list`);
-        events
+      return;
+    }
+
+    const tripDaysList = document.querySelector(`.trip-days`);
+    dates.forEach((date, dateIndex) => {
+      const day = new TripDayComponent(date, dateIndex);
+      const eventsList = day.getElement().querySelector(`.trip-events__list`);
+      events
         .filter((_event) => new Date(_event.startDate).toDateString() === date)
         .forEach((_event) => {
           const event = new EventComponent(_event);
@@ -49,9 +51,8 @@ export default class TripController {
           });
           render(eventsList, event, RenderPosition.BEFOREEND);
         });
-        render(tripDaysList, day, RenderPosition.BEFOREEND);
-      });
-    }
+      render(tripDaysList, day, RenderPosition.BEFOREEND);
+    });
   }
 }
 
