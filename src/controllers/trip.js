@@ -29,7 +29,7 @@ export default class TripController {
         .forEach((_event) => {
           const event = new EventComponent(_event);
           const edit = new EventEditComponent(_event);
-          const editForm = edit.getElement().querySelector(`.event--edit`);
+          // const editForm = edit.getElement().querySelector(`.event--edit`);
           const replaceEditElement = () => {
             replace(event, edit);
           };
@@ -37,7 +37,7 @@ export default class TripController {
             const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
             if (isEscKey) {
               replaceEditElement();
-              editForm.reset();
+              // editForm.reset();
               document.removeEventListener(`keydown`, onEscPress);
             }
           };
