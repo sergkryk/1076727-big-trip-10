@@ -21,6 +21,6 @@ render(tripEvents, new TripDaysListComponent(), RenderPosition.BEFOREEND);
 const tripCost = events.reduce((acc, value) => acc + value.price, 0);
 tripInfo.querySelector(`.trip-info__cost-value`).textContent = tripCost;
 
-const tripController = new TripController();
+const tripController = new TripController(tripEvents);
 
 tripController.render(events);

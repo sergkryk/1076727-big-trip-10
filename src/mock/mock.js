@@ -35,6 +35,7 @@ const generateEvent = () => {
     endDate: Math.max(firstDate, secondDate),
     price: getRandomIntegerNumber(10, 200),
     isArchived: Math.random() > 0.5
+    // isArchived: true
   };
 };
 

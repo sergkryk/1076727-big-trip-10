@@ -14,9 +14,9 @@ export default class TripController {
 
   render(events) {
     const isAllEventsArchived = events.every((element) => element.isArchived);
-    const mainContainer = document.querySelector(`.page-main`);
+
     if (isAllEventsArchived) {
-      render(mainContainer, this._noEventsComponent, RenderPosition.AFTERBEGIN);
+      render(this._container, this._noEventsComponent, RenderPosition.BEFOREEND);
       return;
     }
 
@@ -28,9 +28,9 @@ export default class TripController {
         .filter((_event) => new Date(_event.startDate).toDateString() === date)
         .forEach((_event) => {
           const event = new EventComponent(_event);
-          const edit = new EventEditComponent(_event);
+          const eventEdit = new EventEditComponent(_event);
           const replaceEditElement = () => {
-            replace(event, edit);
+            replace(event, eventEdit);
           };
           const onEscPress = (evt) => {
             const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
@@ -39,12 +39,12 @@ export default class TripController {
               document.removeEventListener(`keydown`, onEscPress);
             }
           };
-          edit.setSubmitClickHandler((evt) => {
+          eventEdit.setSubmitClickHandler((evt) => {
             evt.preventDefault();
             replaceEditElement();
           });
           event.setRollUpButtonClickHandler(() => {
-            replace(edit, event);
+            replace(eventEdit, event);
             document.addEventListener(`keydown`, onEscPress);
           });
           render(eventsList, event, RenderPosition.BEFOREEND);
