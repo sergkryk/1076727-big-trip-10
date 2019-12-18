@@ -33,9 +33,7 @@ const generateEvent = () => {
     description: generateDescription(DESCRIPTIONS),
     startDate: Math.min(firstDate, secondDate),
     endDate: Math.max(firstDate, secondDate),
-    price: getRandomIntegerNumber(10, 200),
-    isArchived: Math.random() > 0.5
-    // isArchived: true
+    price: getRandomIntegerNumber(10, 200)
   };
 };
 
@@ -49,10 +47,7 @@ const events = generateEvents(EVENTS_COUNT);
 
 const dates = [...new Set(events.map((item) => new Date(item.startDate).toDateString()))];
 
-const isAllEventsArchived = events.every((element) => element.isArchived);
-
 export {
   events,
-  dates,
-  isAllEventsArchived
+  dates
 };

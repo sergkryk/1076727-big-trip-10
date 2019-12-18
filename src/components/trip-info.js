@@ -1,5 +1,4 @@
 import AbstractComponent from './abstract-component.js';
-import {isAllEventsArchived} from '../mock/mock.js';
 
 const SHOWING_CITIES_COUNT = 3;
 
@@ -27,22 +26,13 @@ const getDates = (startDate, endDate) => {
 
 
 const createTripInfoTemplate = (events) => {
-  if (!isAllEventsArchived) {
-    return `<div class="trip-info__main">
+  return `<div class="trip-info__main">
     <h1 class="trip-info__title">
       ${getTitle(events)}
     </h1>
     <p class="trip-info__dates">${getDates(events[0].startDate, events[events.length - 1].endDate)}</p>
   </div>
   `;
-  } else {
-    return `<div class="trip-info__main">
-    <h1 class="trip-info__title">
-    </h1>
-    <p class="trip-info__dates">No events ahead</p>
-  </div>
-  `;
-  }
 };
 
 export default class TripInfo extends AbstractComponent {

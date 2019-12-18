@@ -15,13 +15,6 @@ export default class TripController {
   }
 
   render(events) {
-    const isAllEventsArchived = events.every((element) => element.isArchived);
-
-    if (isAllEventsArchived) {
-      render(this._container, this._noEventsComponent, RenderPosition.BEFOREEND);
-      return;
-    }
-
     render(this._container, this._tripDaysList, RenderPosition.BEFOREEND);
     dates.forEach((date, dateIndex) => {
       const day = new TripDayComponent(date, dateIndex);
