@@ -1,4 +1,4 @@
-import {createElement} from '../utils.js';
+import AbstractComponent from './abstract-component.js';
 
 const SHOWING_CITIES_COUNT = 3;
 
@@ -26,43 +26,22 @@ const getDates = (startDate, endDate) => {
 
 
 const createTripInfoTemplate = (events) => {
-  if (events.length > 0) {
-    return `<div class="trip-info__main">
+  return `<div class="trip-info__main">
     <h1 class="trip-info__title">
       ${getTitle(events)}
     </h1>
     <p class="trip-info__dates">${getDates(events[0].startDate, events[events.length - 1].endDate)}</p>
   </div>
   `;
-  } else {
-    return `<div class="trip-info__main">
-    <h1 class="trip-info__title">
-    </h1>
-    <p class="trip-info__dates">No events ahead</p>
-  </div>
-  `;
-  }
 };
 
-export default class TripInfo {
+export default class TripInfo extends AbstractComponent {
   constructor(events) {
+    super();
     this._events = events;
-    this._element = null;
   }
 
   getTemplate() {
     return createTripInfoTemplate(this._events);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

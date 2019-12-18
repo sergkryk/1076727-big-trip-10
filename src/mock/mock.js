@@ -33,8 +33,7 @@ const generateEvent = () => {
     description: generateDescription(DESCRIPTIONS),
     startDate: Math.min(firstDate, secondDate),
     endDate: Math.max(firstDate, secondDate),
-    price: getRandomIntegerNumber(10, 200),
-    isArchived: Math.random() > 0.5
+    price: getRandomIntegerNumber(10, 200)
   };
 };
 

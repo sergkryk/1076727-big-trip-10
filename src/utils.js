@@ -1,29 +1,3 @@
-export const RenderPosition = {
-  AFTERBEGIN: `afterbegin`,
-  BEFOREEND: `beforeend`
-};
-
-const replaceElement = (parent, newChild, oldChild) => {
-  parent.replaceChild(newChild, oldChild);
-};
-
-const render = (container, element, place) => {
-  switch (place) {
-    case RenderPosition.AFTERBEGIN:
-      container.prepend(element);
-      break;
-    case RenderPosition.BEFOREEND:
-      container.append(element);
-      break;
-  }
-};
-
-const createElement = (template) => {
-  const element = document.createElement(`div`);
-  element.innerHTML = template;
-  return element.firstChild;
-};
-
 const getRandomBool = () => Math.random() > 0.5;
 
 const getRandomIntegerNumber = (min, max) => {
@@ -91,7 +65,6 @@ const formatDuration = (time) => {
 };
 
 export {
-  render,
   getRandomBool,
   getRandomIntegerNumber,
   getRandomArrayItem,
@@ -99,8 +72,6 @@ export {
   shuffleArray,
   formatDate,
   formatTime,
-  formatDuration,
-  createElement,
-  replaceElement
+  formatDuration
 };
 
