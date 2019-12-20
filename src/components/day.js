@@ -5,8 +5,8 @@ const createTripDayTemplate = (date, index) => {
   const month = day.toLocaleString(`en`, {month: `short`});
   return `<li class="trip-days__item  day">
       <div class="day__info">
-        <span class="day__counter">${index + 1}</span>
-        <time class="day__date" datetime="${date}">${month} ${day.getDate()}</time>
+        <span class="day__counter">${index !== undefined ? index + 1 : ``}</span>
+        <time class="day__date" datetime="${date !== undefined ? date : ``}">${date !== undefined ? month : ``} ${date !== undefined ? day.getDate() : ``}</time>
       </div>
       <ul class="trip-events__list">
     </ul>

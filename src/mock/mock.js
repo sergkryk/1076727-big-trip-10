@@ -45,7 +45,7 @@ const generateEvents = (count) => {
 
 const events = generateEvents(EVENTS_COUNT);
 
-const dates = [...new Set(events.map((item) => new Date(item.startDate).toDateString()))];
+const dates = events.map((item) => new Date(item.startDate).toDateString());
 
 export {
   events,

@@ -1,6 +1,5 @@
 import TripController from './controllers/trip.js';
 import TripInfoComponent from './components/trip-info.js';
-import SortFormComponent from './components/sort.js';
 import SiteMenuComponent from './components/menu.js';
 import FilterFormComponent from './components/filter.js';
 import {render, RenderPosition} from './utils/render.js';
@@ -14,7 +13,6 @@ const tripEvents = document.querySelector(`.trip-events`);
 render(tripMenu, new SiteMenuComponent(MENU_ITEMS), RenderPosition.BEFOREEND);
 render(tripMenu, new FilterFormComponent(FILTERS), RenderPosition.BEFOREEND);
 render(tripInfo, new TripInfoComponent(events), RenderPosition.AFTERBEGIN);
-render(tripEvents, new SortFormComponent(), RenderPosition.BEFOREEND);
 
 const tripCost = events.reduce((acc, value) => acc + value.price, 0);
 tripInfo.querySelector(`.trip-info__cost-value`).textContent = tripCost;
