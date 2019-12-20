@@ -8,12 +8,11 @@ import TripDaysListComponent from '../components/trip-days-list.js';
 import {dates} from '../mock/mock.js';
 import {render, RenderPosition, replace} from '../utils/render.js';
 
-const renderEvents = (events, flag, parent) => {
-  const days = flag ? [...dates] : [true];
+const renderEvents = (events, parent, isSorted = true) => {
+  const days = isSorted ? [...new Set(dates)] : [true];
   days.forEach((date, dateIndex) => {
-    const day = flag ? new TripDayComponent(date, dateIndex) : new TripDayComponent();
-    const eventsList = day.getElement().querySelector(`.trip-events__list`);
-    const eventsByDate = flag ? [...events.filter((_event) => new Date(_event.startDate).toDateString() === date)] : events;
+    const day = isSorted ? new TripDayComponent(date, dateIndex) : new TripDayComponent();
+    const eventsByDate = isSorted ? [...events.filter((_event) => new Date(_event.startDate).toDateString() === date)] : events;
     eventsByDate.forEach((_event) => {
       const event = new EventComponent(_event);
       const eventEdit = new EventEditComponent(_event);
@@ -35,7 +34,11 @@ const renderEvents = (events, flag, parent) => {
         replace(eventEdit, event);
         document.addEventListener(`keydown`, onEscPress);
       });
-      render(eventsList, event, RenderPosition.BEFOREEND);
+      render(
+          day.getElement().querySelector(`.trip-events__list`),
+          event,
+          RenderPosition.BEFOREEND
+      );
     });
     render(parent, day, RenderPosition.BEFOREEND);
   });
@@ -52,7 +55,7 @@ export default class TripController {
   render(events) {
     render(this._container, this._sortComponent, RenderPosition.BEFOREEND);
     render(this._container, this._tripDaysList, RenderPosition.BEFOREEND);
-    renderEvents(events, true, this._tripDaysList.getElement());
+    renderEvents(events, this._tripDaysList.getElement());
 
     this._sortComponent.setSortTypeChangeHandler((sortType) => {
       let sortedEvents = [];
@@ -72,7 +75,7 @@ export default class TripController {
           break;
       }
       this._tripDaysList.getElement().innerHTML = ``;
-      renderEvents(sortedEvents, isSorted, this._tripDaysList.getElement());
+      renderEvents(sortedEvents, this._tripDaysList.getElement(), isSorted);
     });
   }
 }
