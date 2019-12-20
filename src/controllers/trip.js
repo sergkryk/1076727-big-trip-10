@@ -34,11 +34,12 @@ const renderEvents = (events, parent) => {
   });
 };
 
-const renderDays = (events, parent) => {
-  dates.forEach((date, dateIndex) => {
-    const day = new TripDayComponent(date, dateIndex);
+const renderDays = (events, flag, parent) => {
+  const days = flag ? [...new Set(dates)] : [true];
+  days.forEach((date, dateIndex) => {
+    const day = flag ? new TripDayComponent(date, dateIndex) : new TripDayComponent();
     const eventsList = day.getElement().querySelector(`.trip-events__list`);
-    const eventsByDate = [...events.filter((_event) => new Date(_event.startDate).toDateString() === date)];
+    const eventsByDate = flag ? [...events.filter((_event) => new Date(_event.startDate).toDateString() === date)] : events;
     renderEvents(eventsByDate, eventsList);
     render(parent, day, RenderPosition.BEFOREEND);
   });
@@ -55,29 +56,27 @@ export default class TripController {
   render(events) {
     render(this._container, this._sortComponent, RenderPosition.BEFOREEND);
     render(this._container, this._tripDaysList, RenderPosition.BEFOREEND);
-    renderDays(events, this._tripDaysList.getElement());
+    renderDays(events, true, this._tripDaysList.getElement());
 
     this._sortComponent.setSortTypeChangeHandler((sortType) => {
       let sortedEvents = [];
-      this._tripDaysList.getElement().innerHTML = ``;
-      render(this._tripDaysList.getElement(), new TripDayComponent(), RenderPosition.BEFOREEND);
-      const list = document.querySelector(`.trip-events__list`);
-
+      let isSorted = true;
 
       switch (sortType) {
         case SortType.TIME:
+          isSorted = false;
           sortedEvents = events.slice().sort((a, b) => (b.endDate - b.startDate) - (a.endDate - a.startDate));
-          renderEvents(sortedEvents, list);
           break;
         case SortType.PRICE:
+          isSorted = false;
           sortedEvents = events.slice().sort((a, b) => b.price - a.price);
-          renderEvents(sortedEvents, list);
           break;
         case SortType.EVENT:
-          sortedEvents = events.slice(0, 10);
-          renderDays(events, this._tripDaysList.getElement());
+          sortedEvents = events;
           break;
       }
+      this._tripDaysList.getElement().innerHTML = ``;
+      renderDays(sortedEvents, isSorted, this._tripDaysList.getElement());
     });
   }
 }
