@@ -8,39 +8,35 @@ import TripDaysListComponent from '../components/trip-days-list.js';
 import {dates} from '../mock/mock.js';
 import {render, RenderPosition, replace} from '../utils/render.js';
 
-const renderEvents = (events, parent) => {
-  events.forEach((_event) => {
-    const event = new EventComponent(_event);
-    const eventEdit = new EventEditComponent(_event);
-    const replaceEditElement = () => {
-      replace(event, eventEdit);
-    };
-    const onEscPress = (evt) => {
-      const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
-      if (isEscKey) {
-        replaceEditElement();
-        document.removeEventListener(`keydown`, onEscPress);
-      }
-    };
-    eventEdit.setSubmitClickHandler((evt) => {
-      evt.preventDefault();
-      replaceEditElement();
-    });
-    event.setRollUpButtonClickHandler(() => {
-      replace(eventEdit, event);
-      document.addEventListener(`keydown`, onEscPress);
-    });
-    render(parent, event, RenderPosition.BEFOREEND);
-  });
-};
-
-const renderDays = (events, flag, parent) => {
-  const days = flag ? [...new Set(dates)] : [true];
+const renderEvents = (events, flag, parent) => {
+  const days = flag ? [...dates] : [true];
   days.forEach((date, dateIndex) => {
     const day = flag ? new TripDayComponent(date, dateIndex) : new TripDayComponent();
     const eventsList = day.getElement().querySelector(`.trip-events__list`);
     const eventsByDate = flag ? [...events.filter((_event) => new Date(_event.startDate).toDateString() === date)] : events;
-    renderEvents(eventsByDate, eventsList);
+    eventsByDate.forEach((_event) => {
+      const event = new EventComponent(_event);
+      const eventEdit = new EventEditComponent(_event);
+      const replaceEditElement = () => {
+        replace(event, eventEdit);
+      };
+      const onEscPress = (evt) => {
+        const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
+        if (isEscKey) {
+          replaceEditElement();
+          document.removeEventListener(`keydown`, onEscPress);
+        }
+      };
+      eventEdit.setSubmitClickHandler((evt) => {
+        evt.preventDefault();
+        replaceEditElement();
+      });
+      event.setRollUpButtonClickHandler(() => {
+        replace(eventEdit, event);
+        document.addEventListener(`keydown`, onEscPress);
+      });
+      render(eventsList, event, RenderPosition.BEFOREEND);
+    });
     render(parent, day, RenderPosition.BEFOREEND);
   });
 };
@@ -56,7 +52,7 @@ export default class TripController {
   render(events) {
     render(this._container, this._sortComponent, RenderPosition.BEFOREEND);
     render(this._container, this._tripDaysList, RenderPosition.BEFOREEND);
-    renderDays(events, true, this._tripDaysList.getElement());
+    renderEvents(events, true, this._tripDaysList.getElement());
 
     this._sortComponent.setSortTypeChangeHandler((sortType) => {
       let sortedEvents = [];
@@ -76,7 +72,7 @@ export default class TripController {
           break;
       }
       this._tripDaysList.getElement().innerHTML = ``;
-      renderDays(sortedEvents, isSorted, this._tripDaysList.getElement());
+      renderEvents(sortedEvents, isSorted, this._tripDaysList.getElement());
     });
   }
 }
