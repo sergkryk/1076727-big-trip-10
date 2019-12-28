@@ -25,7 +25,7 @@ export default class TripController {
     const pointControllers = [];
     const days = isSorted ? [...new Set(events.map((item) => new Date(item.startDate).toDateString()))] : [true];
     days.forEach((date, dateIndex) => {
-      const day = isSorted ? new TripDayComponent(date, dateIndex) : new TripDayComponent();
+      const day = isSorted ? new TripDayComponent(date, dateIndex + 1) : new TripDayComponent();
       const eventsByDate = isSorted ? [...events.filter((_event) => new Date(_event.startDate).toDateString() === date)] : events;
       eventsByDate.forEach((_event) => {
         const point = new PointController(day.getElement().querySelector(`.trip-events__list`), onDataChange, onViewChange);

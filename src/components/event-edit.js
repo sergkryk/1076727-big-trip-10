@@ -1,7 +1,11 @@
-import {getRandomBool, formatDate, formatTime} from '../utils.js';
+import {getRandomBool} from '../utils.js';
+import {formatDate, formatTime} from '../utils/format.js';
 import {EVENT_TYPES} from '../const.js';
 import {Destinations} from '../mock/mock.js';
 import AbstractSmartComponent from './abstract-smart-component.js';
+import flatpickr from 'flatpickr';
+import "flatpickr/dist/flatpickr.min.css";
+import "flatpickr/dist/themes/material_blue.css";
 
 const createOffersMarkup = (offers) => {
   return offers
@@ -58,9 +62,53 @@ export default class EventEdit extends AbstractSmartComponent {
     this._event = event;
     this._type = event.type;
     this._destination = Object.assign({}, event.destination);
+    this._flatpickrStartDate = null;
+    this._flatpickrEndDate = null;
 
+    this._applyFlatpickr();
     this._subscribeOnEvents();
     this._submitHandler = null;
+  }
+
+  _applyFlatpickr() {
+    if (this._flatpickrStartDate && this._flatpickrEndDate) {
+      this._flatpickrStartDate.destroy();
+      this._flatpickrStartDate = null;
+      this._flatpickrEndDate.destroy();
+      this._flatpickrEndDate = null;
+    }
+
+    const startDateElement = this.getElement().querySelector(`#event-start-time-1`);
+    const endDateElement = this.getElement().querySelector(`#event-end-time-1`);
+
+    const flatpickrOptions = {
+      allowInput: true,
+      dateFormat: `d/m/y H:i`,
+      enableTime: true,
+      minDate: `today`
+    };
+
+    this._flatpickrStartDate = flatpickr(startDateElement,
+        Object.assign(
+            {},
+            flatpickrOptions,
+            {
+              defaultDate: this._event.startDate
+            }
+        )
+    );
+
+    this._flatpickrEndDate = flatpickr(endDateElement,
+        Object.assign(
+            {},
+            flatpickrOptions,
+            {
+              defaultDate: this._event.endDate,
+              minDate: this._event.startDate
+            }
+        )
+    );
+
   }
 
   _subscribeOnEvents() {
@@ -183,7 +231,7 @@ export default class EventEdit extends AbstractSmartComponent {
 
   rerender() {
     super.rerender();
-    // this._applyFlatpickr();
+    this._applyFlatpickr();
   }
 
   reset() {

@@ -1,27 +1,28 @@
 import AbstractComponent from './abstract-component.js';
-
-const createTripDayTemplate = (date, index) => {
-  const day = new Date(date);
-  const month = day.toLocaleString(`en`, {month: `short`});
-  return `<li class="trip-days__item  day">
-      <div class="day__info">
-        <span class="day__counter">${index !== undefined ? index + 1 : ``}</span>
-        <time class="day__date" datetime="${date !== undefined ? date : ``}">${date !== undefined ? month : ``} ${date !== undefined ? day.getDate() : ``}</time>
-      </div>
-      <ul class="trip-events__list">
-    </ul>
-    </li>
-  `;
-};
+import {formatFullDate, formatMonth, formatDay} from '../utils/format.js';
 
 export default class TripDay extends AbstractComponent {
-  constructor(date, index) {
+  constructor(date = null, index = 0) {
     super();
     this._date = date;
     this._index = index;
   }
 
   getTemplate() {
-    return createTripDayTemplate(this._date, this._index);
+    const month = this._date ? formatMonth(this._date) : ``;
+    const day = this._date ? formatDay(this._date) : ``;
+    const datetime = this._date ? formatFullDate(this._date) : ``;
+
+    return `<li class="trip-days__item  day">
+        <div class="day__info">
+          <span class="day__counter">${this._index || ``}</span>
+          <time class="day__date" datetime="${datetime}">
+            ${month} ${day}
+          </time>
+        </div>
+        <ul class="trip-events__list">
+        </ul>
+      </li>
+    `;
   }
 }
