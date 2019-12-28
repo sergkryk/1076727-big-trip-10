@@ -2,10 +2,17 @@ import EventComponent from '../components/event.js';
 import EventEditComponent from '../components/event-edit.js';
 import {render, RenderPosition, replace} from '../utils/render.js';
 
+const Mode = {
+  DEFAULT: `default`,
+  EDIT: `edit`,
+};
+
 export default class PointController {
-  constructor(container, onDataChange) {
+  constructor(container, onDataChange, onViewChange) {
     this._container = container;
     this._onDataChange = onDataChange;
+    this._onViewChange = onViewChange;
+    this._mode = Mode.DEFAULT;
 
     this._eventComponent = null;
     this._eventEditComponent = null;
@@ -33,14 +40,21 @@ export default class PointController {
     render(this._container, this._eventComponent, RenderPosition.BEFOREEND);
   }
 
+  setDefaultView() {
+    if (this._mode !== Mode.DEFAULT) {
+      this._replaceEditToEvent();
+    }
+  }
+
   _replaceEditToEvent() {
     // this._eventEditComponent.reset();
     replace(this._eventComponent, this._eventEditComponent);
   }
 
   _replaceEventToEdit() {
-    // this._eventEditComponent.reset();
+    this._onViewChange();
     replace(this._eventEditComponent, this._eventComponent);
+    this._mode = Mode.EDIT;
   }
 
   _onEscKeyDown(evt) {
