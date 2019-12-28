@@ -1,4 +1,4 @@
-import {formatTime, formatDuration} from '../utils.js';
+import {formatTime, formatDuration} from '../utils/format.js';
 import AbstractComponent from './abstract-component.js';
 
 

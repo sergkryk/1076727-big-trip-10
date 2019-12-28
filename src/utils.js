@@ -31,38 +31,38 @@ const shuffleArray = (array) => {
   return array;
 };
 
-const addLeadZero = (value) => {
-  return value < 10 ? `0${value}` : String(value);
-};
+// const addLeadZero = (value) => {
+//   return value < 10 ? `0${value}` : String(value);
+// };
 
-const formatDate = (timestamp) => {
-  const date = new Date(timestamp);
+// const formatDate = (timestamp) => {
+//   const date = new Date(timestamp);
 
-  const day = addLeadZero(date.getDate());
-  const month = addLeadZero(date.getMonth() + 1);
-  const year = String(date.getFullYear()).slice(2);
+//   const day = addLeadZero(date.getDate());
+//   const month = addLeadZero(date.getMonth() + 1);
+//   const year = String(date.getFullYear()).slice(2);
 
-  return `${day}/${month}/${year}`;
-};
+//   return `${day}/${month}/${year}`;
+// };
 
-const formatTime = (timestamp) => {
-  const date = new Date(timestamp);
+// const formatTime = (timestamp) => {
+//   const date = new Date(timestamp);
 
-  const hours = addLeadZero(date.getHours());
-  const minutes = addLeadZero(date.getMinutes());
+//   const hours = addLeadZero(date.getHours());
+//   const minutes = addLeadZero(date.getMinutes());
 
-  return `${hours}:${minutes}`;
-};
+//   return `${hours}:${minutes}`;
+// };
 
-const formatDuration = (time) => {
-  const millisecondsInMinute = 60 * 1000;
-  const millisecondsInHour = millisecondsInMinute * 60;
+// const formatDuration = (time) => {
+//   const millisecondsInMinute = 60 * 1000;
+//   const millisecondsInHour = millisecondsInMinute * 60;
 
-  const hours = addLeadZero(Math.floor(time / millisecondsInHour));
-  const minutes = addLeadZero(Math.floor(time % millisecondsInHour / millisecondsInMinute));
+//   const hours = addLeadZero(Math.floor(time / millisecondsInHour));
+//   const minutes = addLeadZero(Math.floor(time % millisecondsInHour / millisecondsInMinute));
 
-  return `${hours > 0 ? `${hours}H` : ``} ${minutes}M`;
-};
+//   return `${hours > 0 ? `${hours}H` : ``} ${minutes}M`;
+// };
 
 export {
   getRandomBool,
@@ -70,8 +70,8 @@ export {
   getRandomArrayItem,
   getRandomDate,
   shuffleArray,
-  formatDate,
-  formatTime,
-  formatDuration
+  // formatDate,
+  // formatTime,
+  // formatDuration
 };
 

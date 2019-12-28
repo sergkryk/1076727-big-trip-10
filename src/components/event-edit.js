@@ -1,4 +1,5 @@
-import {getRandomBool, formatDate, formatTime} from '../utils.js';
+import {getRandomBool} from '../utils.js';
+import {formatDate, formatTime} from '../utils/format.js';
 import {EVENT_TYPES} from '../const.js';
 import {Destinations} from '../mock/mock.js';
 import AbstractSmartComponent from './abstract-smart-component.js';
