@@ -53,18 +53,12 @@ const generateEvent = () => {
   };
 };
 
-const generateEvents = (count) => {
-  return [...Array(count)]
-  .map(() => generateEvent())
-  .sort((currentCard, nextCard) => currentCard.startDate - nextCard.startDate);
+const generateEvents = () => {
+  return [...Array(EVENTS_COUNT)]
+  .map(() => generateEvent());
 };
 
-const events = generateEvents(EVENTS_COUNT);
-
-const dates = events.map((item) => new Date(item.startDate).toDateString());
-
 export {
-  events,
-  dates,
+  generateEvents,
   Destinations
 };
