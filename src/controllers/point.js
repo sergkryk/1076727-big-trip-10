@@ -11,7 +11,7 @@ export default class PointController {
   constructor(container, onDataChange, onViewChange) {
     this._container = container;
     this._onDataChange = onDataChange;
-    this._onViewChange = onViewChange;
+    // this._onViewChange = onViewChange;
     this._mode = Mode.DEFAULT;
 
     this._eventComponent = null;
@@ -53,7 +53,7 @@ export default class PointController {
   }
 
   _replaceEventToEdit() {
-    this._onViewChange();
+    // this._onViewChange();
     replace(this._eventEditComponent, this._eventComponent);
     this._mode = Mode.EDIT;
   }

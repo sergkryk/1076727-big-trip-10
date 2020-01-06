@@ -1,4 +1,4 @@
-import {getRandomArrayItem, getRandomIntegerNumber, getRandomDate, shuffleArray} from '../utils.js';
+import {getRandomArrayItem, getRandomIntegerNumber, getRandomDate, shuffleArray, getRandomBool} from '../utils.js';
 import {EVENT_TYPES, CITIES, OFFERS, DESCRIPTIONS, EVENTS_COUNT} from '../const.js';
 
 const generatePhotos = (description) => {
@@ -49,7 +49,8 @@ const generateEvent = () => {
     description: generateDescription(DESCRIPTIONS),
     startDate: Math.min(firstDate, secondDate),
     endDate: Math.max(firstDate, secondDate),
-    price: getRandomIntegerNumber(10, 200)
+    price: getRandomIntegerNumber(10, 200),
+    isFavorite: getRandomBool()
   };
 };
 
