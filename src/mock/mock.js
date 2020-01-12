@@ -20,8 +20,7 @@ const generatePhotos = (description) => {
 
 const generateOffers = () => {
   const count = getRandomIntegerNumber(0, 6);
-
-  return [...Array(count)].map((it, i) => OFFERS[i]);
+  return shuffleArray(OFFERS.slice()).slice(0, count);
 };
 
 const generateDescription = (descriptions) => {
@@ -40,13 +39,18 @@ const Destinations = CITIES.map((city) => {
   };
 });
 
+const Offers = [...EVENT_TYPES.TRANSFERS, ...EVENT_TYPES.ACTIVITIES]
+   .map((type) => {
+     return {type, offers: generateOffers()};
+   });
+
 const generateEvent = () => {
   const firstDate = generateDate();
   const secondDate = generateDate();
   const destination = Destinations[getRandomIntegerNumber(0, Destinations.length)];
 
   return {
-    type: getRandomArrayItem([...EVENT_TYPES.transfers, ...EVENT_TYPES.activities]),
+    type: getRandomArrayItem([...EVENT_TYPES.TRANSFERS, ...EVENT_TYPES.ACTIVITIES]),
     destination,
     city: getRandomArrayItem(CITIES),
     photos: generatePhotos(),
@@ -66,5 +70,6 @@ const generateEvents = () => {
 
 export {
   generateEvents,
-  Destinations
+  Destinations,
+  Offers
 };

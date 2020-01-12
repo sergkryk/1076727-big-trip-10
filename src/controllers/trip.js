@@ -1,11 +1,11 @@
 import {formatFullDate} from '../utils/format.js';
 import TripDayComponent from '../components/day.js';
-
+import TripInfoComponent from '../components/trip-info.js';
 import PointController from '../controllers/point.js';
 import SortFormComponent, {SortType} from '../components/sort.js';
 import NoEventsComponent from '../components/no-events.js';
 import TripDaysListComponent from '../components/trip-days-list.js';
-import {renderElement} from '../utils/render.js';
+import {renderElement, RenderPosition} from '../utils/render.js';
 
 export default class TripController {
   constructor(container) {
@@ -58,10 +58,17 @@ export default class TripController {
   render(events) {
     this._events = events;
 
+    const tripInfo = document.querySelector(`.trip-main__trip-info`);
+    renderElement(tripInfo, new TripInfoComponent(events), RenderPosition.AFTERBEGIN);
+
     renderElement(this._container, this._sortComponent);
     renderElement(this._container, this._tripDaysList);
 
     this._renderEvents(events, this._onDataChange, this._onViewChange);
+
+    tripInfo.querySelector(`.trip-info__cost-value`).textContent = events
+    .reduce((totalCost, value) => totalCost + value.price + value.offers
+    .reduce((totalOffersCost, offer) => totalOffersCost + offer.price, 0), 0);
 
     this._sortComponent.setSortTypeChangeHandler((sortType) => {
       let sortedEvents = [];

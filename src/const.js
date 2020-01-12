@@ -1,7 +1,7 @@
 const EVENTS_COUNT = 10;
 
 const EVENT_TYPES = {
-  transfers: [
+  TRANSFERS: [
     `bus`,
     `drive`,
     `flight`,
@@ -10,7 +10,7 @@ const EVENT_TYPES = {
     `train`,
     `transport`
   ],
-  activities: [
+  ACTIVITIES: [
     `check-in`,
     `restaurant`,
     `sightseeing`

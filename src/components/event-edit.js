@@ -1,24 +1,28 @@
-import {getRandomBool} from '../utils/common.js';
+// import {getRandomBool} from '../utils/common.js';
 import {formatDate, formatTime} from '../utils/format.js';
 import {EVENT_TYPES} from '../const.js';
-import {Destinations} from '../mock/mock.js';
+import {Destinations, Offers} from '../mock/mock.js';
 import AbstractSmartComponent from './abstract-smart-component.js';
+import {toUpperCaseFirstLetter, formatEventTypePlaceholder} from '../utils/common.js';
 import flatpickr from 'flatpickr';
 import "flatpickr/dist/flatpickr.min.css";
 import "flatpickr/dist/themes/material_blue.css";
 
-const createOffersMarkup = (offers) => {
-  return offers
-    .map((offer) => {
-      const {type, title, price} = offer;
+const createOffersMarkup = (eventType, offers) => {
+  const offersList = Offers.find((offer) => {
+    return eventType === (offer.type);
+  });
 
+  return offersList.offers
+    .map((offer) => {
+      const isCheckedOffer = offers.some((it) => it.type === offer.type);
       return `
         <div class="event__offer-selector">
-          <input class="event__offer-checkbox  visually-hidden" id="event-offer-${type}-1" type="checkbox" name="event-offer-${type}" ${getRandomBool() ? `checked` : ``}>
-          <label class="event__offer-label" for="event-offer-${type}-1">
-            <span class="event__offer-title">${title}</span>
+          <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.type}-1" type="checkbox" name="event-offer-${offer.type}" ${isCheckedOffer ? `checked` : ``}>
+          <label class="event__offer-label" for="event-offer-${offer.type}-1">
+            <span class="event__offer-title">${offer.title}</span>
             &plus;
-            &euro;&nbsp;<span class="event__offer-price">${price}</span>
+            &euro;&nbsp;<span class="event__offer-price">${offer.price}</span>
           </label>
         </div>
       `;
@@ -40,7 +44,7 @@ const createEventTypesMarkup = (types, eventType) => {
       return `
         <div class="event__type-item">
           <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}" ${type === eventType ? `checked` : ``}>
-          <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1">${type}</label>
+          <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1">${toUpperCaseFirstLetter(type)}</label>
         </div>
       `;
     })
@@ -145,9 +149,9 @@ export default class EventEdit extends AbstractSmartComponent {
     const {name, description, photos} = this._destination;
 
     const photosMarkup = createEventPhotosMarkup(photos);
-    const offersMarkup = createOffersMarkup(offers);
+    const offersMarkup = createOffersMarkup(this._type, offers);
 
-    const {transfers, activities} = EVENT_TYPES;
+    const {TRANSFERS, ACTIVITIES} = EVENT_TYPES;
     const cities = createDestinationMarkup(Destinations);
     return `<li class="trip-events__item">
           <form class="event  event--edit" action="#" method="post">
@@ -161,17 +165,17 @@ export default class EventEdit extends AbstractSmartComponent {
                 <div class="event__type-list">
                   <fieldset class="event__type-group">
                     <legend class="visually-hidden">Transfer</legend>
-                    ${createEventTypesMarkup(transfers, this._type)}
+                    ${createEventTypesMarkup(TRANSFERS, this._type)}
                   </fieldset>
                 <fieldset class="event__type-group">
                   <legend class="visually-hidden">Activity</legend>
-                  ${createEventTypesMarkup(activities, this._type)}
+                  ${createEventTypesMarkup(ACTIVITIES, this._type)}
                 </fieldset>
               </div>
             </div>
             <div class="event__field-group  event__field-group--destination">
               <label class="event__label  event__type-output" for="event-destination-1">
-                ${this._type} at
+              ${formatEventTypePlaceholder(this._type)}
               </label>
               <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${name}" list="destination-list-1">
               <datalist id="destination-list-1">
