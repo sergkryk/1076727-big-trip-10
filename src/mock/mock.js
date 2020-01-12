@@ -1,4 +1,4 @@
-import {getRandomArrayItem, getRandomIntegerNumber, shuffleArray, getRandomBool} from '../utils.js';
+import {getRandomArrayItem, getRandomIntegerNumber, shuffleArray, getRandomBool} from '../utils/common.js';
 import {EVENT_TYPES, CITIES, OFFERS, DESCRIPTIONS, EVENTS_COUNT} from '../const.js';
 
 const generateDate = () => {
