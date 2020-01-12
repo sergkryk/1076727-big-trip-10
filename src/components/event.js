@@ -21,16 +21,22 @@ const createOffersMarkup = (offers) => {
     .join(``);
 };
 
-const createEventsListItemTemplate = (event) => {
-  const {type, offers, destination, startDate, endDate, price} = event;
+export default class Event extends AbstractComponent {
+  constructor(event) {
+    super();
+    this._event = event;
+  }
 
-  const offersMarkup = createOffersMarkup(offers);
+  getTemplate() {
+    const {type, offers, destination, startDate, endDate, price} = this._event;
 
-  const startTime = formatTime(startDate);
-  const endTime = formatTime(endDate);
-  const duration = formatDuration(endDate - startDate);
+    const offersMarkup = createOffersMarkup(offers);
 
-  return `<li class="trip-events__item">
+    const startTime = formatTime(startDate);
+    const endTime = formatTime(endDate);
+    const duration = formatDuration(endDate - startDate);
+
+    return `<li class="trip-events__item">
       <div class="event">
         <div class="event__type">
           <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event ${type} icon">
@@ -57,16 +63,6 @@ const createEventsListItemTemplate = (event) => {
       </div>
     </li>
   `;
-};
-
-export default class Event extends AbstractComponent {
-  constructor(event) {
-    super();
-    this._event = event;
-  }
-
-  getTemplate() {
-    return createEventsListItemTemplate(this._event);
   }
 
   setRollUpButtonClickHandler(handler) {

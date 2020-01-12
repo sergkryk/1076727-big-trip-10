@@ -67,7 +67,10 @@ export default class EventEdit extends AbstractSmartComponent {
 
     this._applyFlatpickr();
     this._subscribeOnEvents();
+
     this._submitHandler = null;
+    this._rollupButtonClickHandler = null;
+    this._favoriteClickHandler = null;
   }
 
   _applyFlatpickr() {
@@ -138,7 +141,7 @@ export default class EventEdit extends AbstractSmartComponent {
   }
 
   getTemplate() {
-    const {offers, startDate, endDate, price} = this._event;
+    const {offers, startDate, endDate, price, isFavorite} = this._event;
     const {name, description, photos} = this._destination;
 
     const photosMarkup = createEventPhotosMarkup(photos);
@@ -197,7 +200,7 @@ export default class EventEdit extends AbstractSmartComponent {
             </div>
             <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
             <button class="event__reset-btn" type="reset">Delete</button>
-            <input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" checked>
+            <input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" ${isFavorite ? `checked` : ``}>
             <label class="event__favorite-btn" for="event-favorite-1">
               <span class="visually-hidden">Add to favorite</span>
               <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
@@ -229,6 +232,13 @@ export default class EventEdit extends AbstractSmartComponent {
     `;
   }
 
+  recoveryListeners() {
+    this.setSubmitClickHandler(this._submitHandler);
+    this.setRollupButtonClickHandler(this._rollupButtonClickHandler);
+    this.setFavoriteClickHandler(this._favoriteClickHandler);
+    this._subscribeOnEvents();
+  }
+
   rerender() {
     super.rerender();
     this._applyFlatpickr();
@@ -241,17 +251,18 @@ export default class EventEdit extends AbstractSmartComponent {
     this.rerender();
   }
 
-  recoveryListeners() {
-    this._subscribeOnEvents();
-    this.setSubmitClickHandler(this._submitHandler);
-  }
-
   setSubmitClickHandler(handler) {
     this.getElement().querySelector(`.event--edit`).addEventListener(`submit`, handler);
     this._submitHandler = handler;
   }
 
+  setRollupButtonClickHandler(handler) {
+    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, handler);
+    this._rollupButtonClickHandler = handler;
+  }
+
   setFavoriteClickHandler(handler) {
     this.getElement().querySelector(`.event__favorite-checkbox`).addEventListener(`change`, handler);
+    this._favoriteClickHandler = handler;
   }
 }
