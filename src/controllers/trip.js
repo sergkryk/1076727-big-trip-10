@@ -1,4 +1,4 @@
-
+import {formatFullDate} from '../utils/format.js';
 import TripDayComponent from '../components/day.js';
 
 import PointController from '../controllers/point.js';
@@ -24,13 +24,13 @@ export default class TripController {
 
   _renderEvents(events, isSorted = true) {
     // const pointControllers = [];
-    const days = isSorted ? [...new Set(events.map((item) => new Date(item.startDate).toDateString()))] : [true];
+    const days = isSorted ? [...new Set(events.map((item) => formatFullDate(item.startDate)))] : [true];
     days.forEach((date, dateIndex) => {
       const tripDayComponent = isSorted ? new TripDayComponent(date, dateIndex + 1) : new TripDayComponent();
       renderElement(this._tripDaysList.getElement(), tripDayComponent);
 
       events
-        .filter((event) => isSorted ? new Date(event.startDate).toDateString() === date : event)
+        .filter((event) => isSorted ? formatFullDate(event.startDate) === date : event)
         .forEach((event) => {
           const pointController = new PointController(tripDayComponent.getElement().querySelector(`.trip-events__list`), this._onDataChange);
           pointController.render(event);

@@ -1,5 +1,10 @@
-import {getRandomArrayItem, getRandomIntegerNumber, getRandomDate, shuffleArray, getRandomBool} from '../utils.js';
+import {getRandomArrayItem, getRandomIntegerNumber, shuffleArray, getRandomBool} from '../utils.js';
 import {EVENT_TYPES, CITIES, OFFERS, DESCRIPTIONS, EVENTS_COUNT} from '../const.js';
+
+const generateDate = () => {
+  const day = 24 * 3600 * 1000;
+  return getRandomIntegerNumber(Date.now(), Date.now() + day * 7);
+};
 
 const generatePhotos = (description) => {
   const count = getRandomIntegerNumber(1, 6);
@@ -36,8 +41,8 @@ const Destinations = CITIES.map((city) => {
 });
 
 const generateEvent = () => {
-  const firstDate = getRandomDate();
-  const secondDate = getRandomDate();
+  const firstDate = generateDate();
+  const secondDate = generateDate();
   const destination = Destinations[getRandomIntegerNumber(0, Destinations.length)];
 
   return {

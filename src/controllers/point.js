@@ -8,7 +8,7 @@ const Mode = {
 };
 
 export default class PointController {
-  constructor(container, onDataChange, onViewChange) {
+  constructor(container, onDataChange) {
     this._container = container;
     this._onDataChange = onDataChange;
     // this._onViewChange = onViewChange;
@@ -30,6 +30,10 @@ export default class PointController {
     this._eventEditComponent.setSubmitClickHandler((evt) => {
       evt.preventDefault();
       this._replaceEditToEvent();
+    });
+
+    this._eventEditComponent.setFavoriteClickHandler(() => {
+      this._onDataChange(this, point, Object.assign({}, point, {isFavorite: !point.isFavorite}));
     });
 
     this._eventComponent.setRollUpButtonClickHandler(() => {

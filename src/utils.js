@@ -10,13 +10,13 @@ const getRandomArrayItem = (array) => {
   return array[randomIndex];
 };
 
-const getRandomDate = () => {
-  return (
-    Date.now() +
-      1 +
-      Math.floor(Math.random() * 7) * 24 * getRandomIntegerNumber(0, 60) * 60 * 1000
-  );
-};
+// const getRandomDate = () => {
+//   return (
+//     Date.now() +
+//       1 +
+//       Math.floor(Math.random() * 7) * 24 * getRandomIntegerNumber(0, 60) * 60 * 1000
+//   );
+// };
 
 
 const shuffleArray = (array) => {
@@ -68,7 +68,7 @@ export {
   getRandomBool,
   getRandomIntegerNumber,
   getRandomArrayItem,
-  getRandomDate,
+  // getRandomDate,
   shuffleArray,
   // formatDate,
   // formatTime,
