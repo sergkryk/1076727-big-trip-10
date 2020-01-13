@@ -54,6 +54,12 @@ const OFFERS = [
   }
 ];
 
+const SORT_TYPE = {
+  EVENT: `event`,
+  TIME: `time`,
+  PRICE: `price`
+};
+
 const FILTERS = [
   `everything`,
   `future`,
@@ -79,4 +85,4 @@ const DESCRIPTIONS = [
 ];
 
 
-export {EVENT_TYPES, CITIES, OFFERS, FILTERS, MENU_ITEMS, DESCRIPTIONS, EVENTS_COUNT};
+export {EVENT_TYPES, CITIES, OFFERS, FILTERS, MENU_ITEMS, DESCRIPTIONS, EVENTS_COUNT, SORT_TYPE};

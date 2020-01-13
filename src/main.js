@@ -1,5 +1,5 @@
 import TripController from './controllers/trip.js';
-
+import PointsModel from './models/points.js';
 import SiteMenuComponent from './components/menu.js';
 import FilterFormComponent from './components/filter.js';
 import {renderElement} from './utils/render.js';
@@ -13,10 +13,13 @@ renderElement(tripMenu, new SiteMenuComponent(MENU_ITEMS));
 renderElement(tripMenu, new FilterFormComponent(FILTERS));
 
 const tripEvents = document.querySelector(`.trip-events`);
-const tripController = new TripController(tripEvents);
 
 const events = generateEvents()
   .slice()
   .sort((a, b) => a.startDate - b.startDate);
 
-tripController.render(events);
+const pointsModel = new PointsModel();
+pointsModel.setPoints(events);
+
+const tripController = new TripController(tripEvents, pointsModel);
+tripController.render();

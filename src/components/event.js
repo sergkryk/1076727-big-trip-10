@@ -1,4 +1,4 @@
-import {formatTime, formatDuration} from '../utils/format.js';
+import {formatDateTime, formatTime, formatDuration} from '../utils/format.js';
 import AbstractComponent from './abstract-component.js';
 import {formatEventTypePlaceholder} from '../utils/common.js';
 
@@ -15,7 +15,8 @@ const createOffersMarkup = (offers) => {
         <li class="event__offer">
           <span class="event__offer-title">${title}</span>
           &plus;
-          &euro;&nbsp;<span class="event__offer-price">${price}</span>
+          &euro;&nbsp;
+        <span class="event__offer-price">${price}</span>
         </li>
       `;
     })
@@ -35,6 +36,8 @@ export default class Event extends AbstractComponent {
 
     const startTime = formatTime(startDate);
     const endTime = formatTime(endDate);
+    const startDateTime = formatDateTime(startDate);
+    const endDateTime = formatDateTime(endDate);
     const duration = formatDuration(endDate - startDate);
 
     return `<li class="trip-events__item">
@@ -45,9 +48,9 @@ export default class Event extends AbstractComponent {
         <h3 class="event__title">${formatEventTypePlaceholder(type)} ${destination.name}</h3>
         <div class="event__schedule">
           <p class="event__time">
-            <time class="event__start-time" datetime="${startDate}">${startTime}</time>
+            <time class="event__start-time" datetime="${startDateTime}">${startTime}</time>
             &mdash;
-            <time class="event__end-time" datetime="${endDate}">${endTime}</time>
+            <time class="event__end-time" datetime="${endDateTime}">${endTime}</time>
           </p>
           <p class="event__duration">${duration}</p>
         </div>

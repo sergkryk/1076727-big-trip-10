@@ -5,7 +5,9 @@ const SHOWING_CITIES_COUNT = 3;
 
 const getTitle = (events) => {
   if (events.length > SHOWING_CITIES_COUNT) {
-    return `${events[0].city} &mdash; ... &mdash; ${events[events.length - 1].city}`;
+    return `
+      ${events[0].city} &mdash; ... &mdash; ${events[events.length - 1].city}
+    `;
   } else {
     return events
       .map((event, index) => {
@@ -27,9 +29,7 @@ const getDates = (startDate, endDate) => {
 
 const createTripInfoTemplate = (events) => {
   return `<div class="trip-info__main">
-    <h1 class="trip-info__title">
-      ${getTitle(events)}
-    </h1>
+    <h1 class="trip-info__title">${getTitle(events)}</h1>
     <p class="trip-info__dates">${getDates(events[0].startDate, events[events.length - 1].endDate)}</p>
   </div>
   `;

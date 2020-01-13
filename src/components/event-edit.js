@@ -8,32 +8,12 @@ import flatpickr from 'flatpickr';
 import "flatpickr/dist/flatpickr.min.css";
 import "flatpickr/dist/themes/material_blue.css";
 
-const createOffersMarkup = (eventType, offers) => {
-  const offersList = Offers.find((offer) => {
-    return eventType === (offer.type);
-  });
-
-  return offersList.offers
-    .map((offer) => {
-      const isCheckedOffer = offers.some((it) => it.type === offer.type);
+const createDestinationsMarkup = (destinations) => {
+  return destinations
+    .map((destination) => {
       return `
-        <div class="event__offer-selector">
-          <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.type}-1" type="checkbox" name="event-offer-${offer.type}" ${isCheckedOffer ? `checked` : ``}>
-          <label class="event__offer-label" for="event-offer-${offer.type}-1">
-            <span class="event__offer-title">${offer.title}</span>
-            &plus;
-            &euro;&nbsp;<span class="event__offer-price">${offer.price}</span>
-          </label>
-        </div>
+        <option value="${destination.name}"></option>
       `;
-    })
-    .join(``);
-};
-
-const createEventPhotosMarkup = (photos) => {
-  return photos
-    .map((photo) => {
-      return `<img class="event__photo" src="${photo.src}" alt="${photo.description}">`;
     })
     .join(``);
 };
@@ -43,18 +23,66 @@ const createEventTypesMarkup = (types, eventType) => {
     .map((type) => {
       return `
         <div class="event__type-item">
-          <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}" ${type === eventType ? `checked` : ``}>
-          <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1">${toUpperCaseFirstLetter(type)}</label>
+          <input
+            id="event-type-${type}-1"
+            class="event__type-input  visually-hidden"
+            type="radio"
+            name="event-type"
+            value="${type}" ${type === eventType ? `checked` : ``}
+          >
+          <label
+            class="event__type-label  event__type-label--${type}"
+            for="event-type-${type}-1"
+          >
+            ${toUpperCaseFirstLetter(type)}
+          </label>
         </div>
       `;
     })
     .join(``);
 };
 
-const createDestinationMarkup = (destinations) => {
-  return destinations
-    .map((destination) => {
-      return `<option value="${destination.name}"></option>`;
+const createOffersMarkup = (eventType, offers) => {
+  const offersList = Offers.find((offer) => {
+    return eventType === (offer.type);
+  });
+
+  return offersList.offers
+    .map((offer) => {
+      const isCheckedOffer = offers.some((it) => it.type === offer.type);
+      return `
+      <div class="event__offer-selector">
+        <input
+          class="event__offer-checkbox  visually-hidden"
+          id="event-offer-${offer.type}-1"
+          type="checkbox"
+          name="event-offer-${offer.type}" ${isCheckedOffer ? `checked` : ``}
+        >
+        <label
+          class="event__offer-label"
+          for="event-offer-${offer.type}-1"
+        >
+          <span class="event__offer-title">
+            ${offer.title}
+          </span>
+            &plus;
+            &euro;&nbsp;
+          <span class="event__offer-price">
+            ${offer.price}
+          </span>
+        </label>
+      </div>
+    `;
+    })
+    .join(``);
+};
+
+const createEventPhotosMarkup = (photos) => {
+  return photos
+    .map((photo) => {
+      return `
+      <img class="event__photo" src="${photo.src}" alt="${photo.description}">
+      `;
     })
     .join(``);
 };
@@ -152,7 +180,7 @@ export default class EventEdit extends AbstractSmartComponent {
     const offersMarkup = createOffersMarkup(this._type, offers);
 
     const {TRANSFERS, ACTIVITIES} = EVENT_TYPES;
-    const cities = createDestinationMarkup(Destinations);
+    const cities = createDestinationsMarkup(Destinations);
     return `<li class="trip-events__item">
           <form class="event  event--edit" action="#" method="post">
             <header class="event__header">
@@ -219,7 +247,7 @@ export default class EventEdit extends AbstractSmartComponent {
             <section class="event__section  event__section--offers">
               <h3 class="event__section-title  event__section-title--offers">Offers</h3>
               <div class="event__available-offers">
-                ${offersMarkup}
+              ${offersMarkup}
             </section>
             <section class="event__section  event__section--destination">
               <h3 class="event__section-title  event__section-title--destination">Destination</h3>
@@ -255,18 +283,27 @@ export default class EventEdit extends AbstractSmartComponent {
     this.rerender();
   }
 
-  setSubmitClickHandler(handler) {
-    this.getElement().querySelector(`.event--edit`).addEventListener(`submit`, handler);
-    this._submitHandler = handler;
+  setFavoriteClickHandler(handler) {
+    this.getElement()
+      .querySelector(`.event__favorite-checkbox`)
+      .addEventListener(`change`, handler);
+
+    this._favoriteClickHandler = handler;
   }
 
   setRollupButtonClickHandler(handler) {
-    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, handler);
+    this.getElement()
+      .querySelector(`.event__rollup-btn`)
+      .addEventListener(`click`, handler);
+
     this._rollupButtonClickHandler = handler;
   }
 
-  setFavoriteClickHandler(handler) {
-    this.getElement().querySelector(`.event__favorite-checkbox`).addEventListener(`change`, handler);
-    this._favoriteClickHandler = handler;
+  setSubmitClickHandler(handler) {
+    this.getElement()
+      .querySelector(`.event--edit`)
+      .addEventListener(`submit`, handler);
+
+    this._submitHandler = handler;
   }
 }

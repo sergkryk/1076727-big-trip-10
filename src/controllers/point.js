@@ -21,6 +21,15 @@ export default class PointController {
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
   }
 
+  _onEscKeyDown(evt) {
+    const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
+
+    if (isEscKey) {
+      this._replaceEditToEvent();
+      document.removeEventListener(`keydown`, this._onEscKeyDown);
+    }
+  }
+
   _replaceEditToEvent() {
     document.removeEventListener(`keydown`, this._onEscKeyDown);
     this._eventEditComponent.reset();
@@ -32,15 +41,6 @@ export default class PointController {
     this._onViewChange();
     replaceElement(this._eventEditComponent, this._eventComponent);
     this._mode = Mode.EDIT;
-  }
-
-  _onEscKeyDown(evt) {
-    const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
-
-    if (isEscKey) {
-      this._replaceEditToEvent();
-      document.removeEventListener(`keydown`, this._onEscKeyDown);
-    }
   }
 
   render(point) {
