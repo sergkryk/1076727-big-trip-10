@@ -64,14 +64,14 @@ export default class PointController {
     });
 
     this._eventEditComponent.setDeleteButtonClickHandler(() =>
-      this._onDataChange(this, event, null)
+      this._onDataChange(this, point, null)
     );
 
     this._eventEditComponent.setSubmitClickHandler((evt) => {
       evt.preventDefault();
 
       const data = this._eventEditComponent.getData();
-      this._onDataChange(this, point, data);
+      this._onDataChange(this, point, Object.assign({}, data, {id: point.id}));
     });
 
     this._eventEditComponent.setRollupButtonClickHandler(() => this._replaceEditToEvent());

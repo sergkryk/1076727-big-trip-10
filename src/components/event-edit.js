@@ -4,11 +4,12 @@ import {EVENT_TYPES} from '../const.js';
 import {Destinations, Offers} from '../mock/mock.js';
 import {MODE} from '../const.js';
 import AbstractSmartComponent from './abstract-smart-component.js';
-import {toUpperCaseFirstLetter, formatEventTypePlaceholder, getRandomIntegerNumber} from '../utils/common.js';
+import {toUpperCaseFirstLetter, formatEventTypePlaceholder} from '../utils/common.js';
 import flatpickr from 'flatpickr';
 import "flatpickr/dist/flatpickr.min.css";
 import "flatpickr/dist/themes/material_blue.css";
 import moment from "moment";
+import he from 'he';
 
 const createDestinationsMarkup = (destinations) => {
   return destinations
@@ -52,7 +53,7 @@ const createOffersMarkup = (eventType, offers) => {
   return offersList.offers
     .map((offer) => {
       const isCheckedOffer = offers.some((it) => it.title === offer.title);
-      const offerId = getRandomIntegerNumber(Date.now(), Date.now() + Math.random() * 1000);
+      const offerId = String(Math.round(Date.now() * Math.random()));
       return `
       <div class="event__offer-selector">
         <input
@@ -112,7 +113,7 @@ const parseFormData = (form) => {
   return {
     type: formData.get(`event-type`),
     destination: {
-      name: formData.get(`event-destination`),
+      name: he.encode(formData.get(`event-destination`)),
       description,
       photos
     },

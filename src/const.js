@@ -91,7 +91,7 @@ const DESCRIPTIONS = [
 ];
 
 const EMPTY_POINT = {
-  id: String(new Date() + Math.random()),
+  id: String(Math.round(Date.now() * Math.random())),
   type: `bus`,
   destination: {
     name: ``,
