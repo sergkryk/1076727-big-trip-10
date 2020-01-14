@@ -45,17 +45,18 @@ export default class SortForm extends AbstractComponent {
   }
 
   setSortTypeChangeHandler(handler) {
-    this.getElement().addEventListener(`click`, (evt) => {
-
-      const sortType = evt.target.dataset.sortType;
-
-      if (this._currentSortType === sortType) {
+    this.getElement().addEventListener(`change`, (evt) => {
+      if (this._currenSortType === evt.target.dataset.sortType) {
         return;
       }
 
-      this._currentSortType = sortType;
+      this._currenSortType = evt.target.dataset.sortType;
 
-      handler(this._currentSortType);
+      this.getElement()
+        .querySelector(`.trip-sort__item--day`)
+        .textContent = this._currenSortType === SORT_TYPE.EVENT ? `Day` : ``;
+
+      handler(this._currenSortType);
     });
   }
 }

@@ -19,8 +19,11 @@ export default class TripController {
     this._tripDaysList = new TripDaysListComponent();
     this._sortComponent = new SortFormComponent();
 
+    this._onSortTypeChange = this._onSortTypeChange.bind(this);
     this._onDataChange = this._onDataChange.bind(this);
     this._onViewChange = this._onViewChange.bind(this);
+
+    this._sortComponent.setSortTypeChangeHandler(this._onSortTypeChange);
   }
 
   _onDataChange(pointController, oldData, newData) {
@@ -31,6 +34,26 @@ export default class TripController {
     }
     this._events = [].concat(this._events.slice(0, index), newData, this._events.slice(index + 1));
     pointController.render(this._events[index]);
+  }
+
+  _onSortTypeChange(sortType) {
+    let sortedEvents = [];
+    let isSorted = sortType === SORT_TYPE.EVENT;
+    const events = this._pointsModel.getPoints();
+
+    switch (sortType) {
+      case SORT_TYPE.TIME:
+        sortedEvents = events.slice().sort((a, b) => (b.endDate - b.startDate) - (a.endDate - a.startDate));
+        break;
+      case SORT_TYPE.PRICE:
+        sortedEvents = events.slice().sort((a, b) => b.price - a.price);
+        break;
+      case SORT_TYPE.EVENT:
+        sortedEvents = events.slice();
+        break;
+    }
+    this._tripDaysList.getElement().innerHTML = ``;
+    this._eventControllers = this._renderEvents(sortedEvents, this._onDataChange, this._onViewChange, isSorted);
   }
 
   _onViewChange() {
@@ -76,26 +99,5 @@ export default class TripController {
     tripInfo.querySelector(`.trip-info__cost-value`).textContent = points
     .reduce((totalCost, value) => totalCost + value.price + value.offers
     .reduce((totalOffersCost, offer) => totalOffersCost + offer.price, 0), 0);
-
-    this._sortComponent.setSortTypeChangeHandler((sortType) => {
-      let sortedEvents = [];
-      let isSorted = true;
-
-      switch (sortType) {
-        case SORT_TYPE.TIME:
-          isSorted = false;
-          sortedEvents = points.slice().sort((a, b) => (b.endDate - b.startDate) - (a.endDate - a.startDate));
-          break;
-        case SORT_TYPE.PRICE:
-          isSorted = false;
-          sortedEvents = points.slice().sort((a, b) => b.price - a.price);
-          break;
-        case SORT_TYPE.EVENT:
-          sortedEvents = points;
-          break;
-      }
-      this._tripDaysList.getElement().innerHTML = ``;
-      this._renderEvents(sortedEvents, this._onDataChange, this._onViewChange, isSorted);
-    });
   }
 }
