@@ -1,5 +1,7 @@
 import {createElement} from '../utils/render.js';
 
+const HIDDEN_CLASS = `visually-hidden`;
+
 export default class AbstractComponent {
   constructor() {
     if (new.target === AbstractComponent) {
@@ -20,7 +22,20 @@ export default class AbstractComponent {
     throw new Error(`Abstract method not implemented: getTemplate`);
   }
 
+  hide() {
+    if (this._element) {
+      // console.log(this._element);
+      this._element.classList.add(HIDDEN_CLASS);
+    }
+  }
+
   removeElement() {
     this._element = null;
+  }
+
+  show() {
+    if (this._element) {
+      this._element.classList.remove(HIDDEN_CLASS);
+    }
   }
 }

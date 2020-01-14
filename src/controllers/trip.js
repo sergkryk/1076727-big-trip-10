@@ -8,6 +8,8 @@ import TripDaysListComponent from '../components/trip-days-list.js';
 import {renderElement, RenderPosition} from '../utils/render.js';
 import {SORT_TYPE, MODE, EMPTY_POINT} from '../const.js';
 
+const HIDDEN_CLASS = `visually-hidden`;
+
 const renderEvents = (container, events, onDataChange, onViewChange, isSorted = true) => {
   const pointControllers = [];
 
@@ -153,6 +155,10 @@ export default class TripController {
     this._creatingPoint.render(EMPTY_POINT, MODE.ADDING);
   }
 
+  hide() {
+    this._container.classList.add(HIDDEN_CLASS);
+  }
+
   render() {
     const container = this._container;
     const points = this._pointsModel.getPoints();
@@ -173,5 +179,9 @@ export default class TripController {
     tripInfo.querySelector(`.trip-info__cost-value`).textContent = points
     .reduce((totalCost, value) => totalCost + value.price + value.offers
     .reduce((totalOffersCost, offer) => totalOffersCost + offer.price, 0), 0);
+  }
+
+  show() {
+    this._container.classList.remove(HIDDEN_CLASS);
   }
 }
