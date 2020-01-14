@@ -28,27 +28,27 @@ const CITIES = [
 
 const OFFERS = [
   {
-    type: `luggage`,
+    // type: `luggage`,
     title: `Add luggage`,
     price: 10
   },
   {
-    type: `comfort`,
+    // type: `comfort`,
     title: `Switch to comfort class`,
     price: 150
   },
   {
-    type: `meal`,
+    // type: `meal`,
     title: `Add meal`,
     price: 2
   },
   {
-    type: `seats`,
+    // type: `seats`,
     title: `Choose seats`,
     price: 9
   },
   {
-    type: `train`,
+    // type: `train`,
     title: `Travel by train`,
     price: 40
   }
@@ -61,6 +61,7 @@ const SORT_TYPE = {
 };
 
 const MODE = {
+  ADDING: `adding`,
   DEFAULT: `default`,
   EDIT: `edit`,
 };
@@ -89,5 +90,23 @@ const DESCRIPTIONS = [
   `Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`
 ];
 
+const EMPTY_POINT = {
+  id: String(new Date() + Math.random()),
+  type: `bus`,
+  destination: {
+    name: ``,
+    description: ``,
+    pictures: [{
+      src: ``,
+      description: ``
+    }]
+  },
+  offers: [],
+  startDate: Date.now(),
+  endDate: Date.now(),
+  price: 0,
+  isFavorite: false
+};
 
-export {EVENT_TYPES, CITIES, OFFERS, FILTERS, MENU_ITEMS, DESCRIPTIONS, EVENTS_COUNT, SORT_TYPE, MODE};
+
+export {EVENT_TYPES, CITIES, OFFERS, FILTERS, MENU_ITEMS, DESCRIPTIONS, EVENTS_COUNT, SORT_TYPE, MODE, EMPTY_POINT};

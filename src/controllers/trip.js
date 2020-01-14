@@ -6,7 +6,7 @@ import SortFormComponent from '../components/sort.js';
 import NoEventsComponent from '../components/no-events.js';
 import TripDaysListComponent from '../components/trip-days-list.js';
 import {renderElement, RenderPosition} from '../utils/render.js';
-import {SORT_TYPE} from '../const.js';
+import {SORT_TYPE, MODE, EMPTY_POINT} from '../const.js';
 
 const renderEvents = (container, events, onDataChange, onViewChange, isSorted = true) => {
   const pointControllers = [];
@@ -29,7 +29,7 @@ const renderEvents = (container, events, onDataChange, onViewChange, isSorted = 
       .forEach((event) => {
         const pointController = new PointController(tripDayComponent.getElement().querySelector(`.trip-events__list`), onDataChange, onViewChange);
 
-        pointController.render(event);
+        pointController.render(event, MODE.DEFAULT);
         pointControllers.push(pointController);
       });
   });
@@ -44,6 +44,7 @@ export default class TripController {
     this._pointControllers = [];
     this._pointsModel = pointsModel;
     this._isSorted = true;
+    this._creatingPoint = null;
 
     this._noEventsComponent = new NoEventsComponent();
     this._tripDaysList = new TripDaysListComponent();
@@ -58,19 +59,47 @@ export default class TripController {
     this._sortComponent.setSortTypeChangeHandler(this._onSortTypeChange);
   }
 
-  _onDataChange(pointController, oldData, newData) {
-    const index = this._events.findIndex((it) => it === oldData);
+  _calculateTotalTripCost() {
+    const totalPrice = this._pointsModel.getPoints()
+      .reduce((totalCost, value) => totalCost + value.price +
+        value.offers
+          .reduce((totalOffersCost, offer) => totalOffersCost + offer.price, 0),
+      0);
+    document.querySelector(`.trip-info__cost-value`).textContent = totalPrice;
+  }
 
-    if (index === -1) {
-      return;
+  _onDataChange(pointController, oldData, newData) {
+    if (oldData === EMPTY_POINT) {
+      this._creatingEvent = null;
+
+      if (newData === null) {
+        pointController.destroy();
+        this._updatePoints();
+      } else {
+        this._pointsModel.addPoint(newData);
+        pointController.render(newData, MODE.DEFAULT);
+
+        this._pointControllers = [].concat(pointController, this._pointControllers);
+
+        this._removePoints();
+        this._renderPoints(this._pointsModel.getPoints());
+      }
+    } else if (newData === null) {
+      this._pointsModel.removePoint(oldData.id);
+      this._updatePoints();
+    } else {
+      const isSuccess = this._pointsModel.updatePoint(oldData.id, newData);
+
+      if (isSuccess) {
+        pointController.render(newData, MODE.DEFAULT);
+      }
     }
-    this._events = [].concat(this._events.slice(0, index), newData, this._events.slice(index + 1));
-    pointController.render(this._events[index]);
+
+    this._calculateTotalTripCost();
   }
 
   _onFilterChange() {
-    this._removePoints();
-    this._renderPoints(this._pointsModel.getPoints());
+    this._updatePoints();
   }
 
   _onSortTypeChange(sortType) {
@@ -100,11 +129,28 @@ export default class TripController {
 
   _removePoints() {
     this._tripDaysList.getElement().innerHTML = ``;
+    this._pointControllers.forEach((pointController) => pointController.destroy());
     this._pointControllers = [];
   }
 
   _renderPoints(points) {
-    this._eventControllers = renderEvents(this._tripDaysList.getElement(), points, this._onDataChange, this._onViewChange, this._isSorted);
+    this._pointControllers = renderEvents(this._tripDaysList.getElement(), points, this._onDataChange, this._onViewChange, this._isSorted);
+
+    this._calculateTotalTripCost();
+  }
+
+  _updatePoints() {
+    this._removePoints();
+    this._renderPoints(this._pointsModel.getPoints());
+  }
+
+  createPoint() {
+    if (this._creatingPoint) {
+      return;
+    }
+
+    this._creatingPoint = new PointController(this._tripSortComponent.getElement(), this._onDataChange, this._onViewChange);
+    this._creatingPoint.render(EMPTY_POINT, MODE.ADDING);
   }
 
   render() {
