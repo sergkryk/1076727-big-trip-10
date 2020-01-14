@@ -1,7 +1,7 @@
 const EVENTS_COUNT = 10;
 
 const EVENT_TYPES = {
-  transfers: [
+  TRANSFERS: [
     `bus`,
     `drive`,
     `flight`,
@@ -10,7 +10,7 @@ const EVENT_TYPES = {
     `train`,
     `transport`
   ],
-  activities: [
+  ACTIVITIES: [
     `check-in`,
     `restaurant`,
     `sightseeing`
@@ -54,11 +54,22 @@ const OFFERS = [
   }
 ];
 
-const FILTERS = [
-  `everything`,
-  `future`,
-  `past`,
-];
+const SORT_TYPE = {
+  EVENT: `event`,
+  TIME: `time`,
+  PRICE: `price`
+};
+
+const MODE = {
+  DEFAULT: `default`,
+  EDIT: `edit`,
+};
+
+const FILTERS = {
+  EVERYTHING: `everything`,
+  FUTURE: `future`,
+  PAST: `past`
+};
 
 const MENU_ITEMS = [
   `Table`,
@@ -79,4 +90,4 @@ const DESCRIPTIONS = [
 ];
 
 
-export {EVENT_TYPES, CITIES, OFFERS, FILTERS, MENU_ITEMS, DESCRIPTIONS, EVENTS_COUNT};
+export {EVENT_TYPES, CITIES, OFFERS, FILTERS, MENU_ITEMS, DESCRIPTIONS, EVENTS_COUNT, SORT_TYPE, MODE};

@@ -1,5 +1,10 @@
-import {getRandomArrayItem, getRandomIntegerNumber, getRandomDate, shuffleArray} from '../utils.js';
+import {getRandomArrayItem, getRandomIntegerNumber, shuffleArray, getRandomBool} from '../utils/common.js';
 import {EVENT_TYPES, CITIES, OFFERS, DESCRIPTIONS, EVENTS_COUNT} from '../const.js';
+
+const generateDate = () => {
+  const day = 24 * 3600 * 1000;
+  return Date.now() + getRandomIntegerNumber(-day, day * 3);
+};
 
 const generatePhotos = (description) => {
   const count = getRandomIntegerNumber(1, 6);
@@ -15,8 +20,7 @@ const generatePhotos = (description) => {
 
 const generateOffers = () => {
   const count = getRandomIntegerNumber(0, 6);
-
-  return [...Array(count)].map((it, i) => OFFERS[i]);
+  return shuffleArray(OFFERS.slice()).slice(0, count);
 };
 
 const generateDescription = (descriptions) => {
@@ -35,13 +39,19 @@ const Destinations = CITIES.map((city) => {
   };
 });
 
+const Offers = [...EVENT_TYPES.TRANSFERS, ...EVENT_TYPES.ACTIVITIES]
+   .map((type) => {
+     return {type, offers: generateOffers()};
+   });
+
 const generateEvent = () => {
-  const firstDate = getRandomDate();
-  const secondDate = getRandomDate();
+  const firstDate = generateDate();
+  const secondDate = generateDate();
   const destination = Destinations[getRandomIntegerNumber(0, Destinations.length)];
 
   return {
-    type: getRandomArrayItem([...EVENT_TYPES.transfers, ...EVENT_TYPES.activities]),
+    id: String(new Date() + Math.random()),
+    type: getRandomArrayItem([...EVENT_TYPES.TRANSFERS, ...EVENT_TYPES.ACTIVITIES]),
     destination,
     city: getRandomArrayItem(CITIES),
     photos: generatePhotos(),
@@ -49,7 +59,8 @@ const generateEvent = () => {
     description: generateDescription(DESCRIPTIONS),
     startDate: Math.min(firstDate, secondDate),
     endDate: Math.max(firstDate, secondDate),
-    price: getRandomIntegerNumber(10, 200)
+    price: getRandomIntegerNumber(10, 200),
+    isFavorite: getRandomBool()
   };
 };
 
@@ -60,5 +71,6 @@ const generateEvents = () => {
 
 export {
   generateEvents,
-  Destinations
+  Destinations,
+  Offers
 };
