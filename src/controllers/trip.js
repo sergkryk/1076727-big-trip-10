@@ -70,7 +70,7 @@ export default class TripController {
 
   _onDataChange(pointController, oldData, newData) {
     if (oldData === EMPTY_POINT) {
-      this._creatingEvent = null;
+      this._creatingPoint = null;
 
       if (newData === null) {
         pointController.destroy();
@@ -149,7 +149,7 @@ export default class TripController {
       return;
     }
 
-    this._creatingPoint = new PointController(this._tripSortComponent.getElement(), this._onDataChange, this._onViewChange);
+    this._creatingPoint = new PointController(this._sortComponent.getElement(), this._onDataChange, this._onViewChange);
     this._creatingPoint.render(EMPTY_POINT, MODE.ADDING);
   }
 

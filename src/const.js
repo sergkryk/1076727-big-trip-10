@@ -96,7 +96,7 @@ const EMPTY_POINT = {
   destination: {
     name: ``,
     description: ``,
-    pictures: [{
+    photos: [{
       src: ``,
       description: ``
     }]

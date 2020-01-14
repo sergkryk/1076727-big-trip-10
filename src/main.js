@@ -28,5 +28,5 @@ tripController.render();
 
 document.querySelector(`.trip-main__event-add-btn`)
    .addEventListener(`click`, () => {
-     tripController.createEvent();
+     tripController.createPoint();
    });
