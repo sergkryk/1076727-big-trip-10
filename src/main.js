@@ -1,18 +1,14 @@
 import TripController from './controllers/trip.js';
+import FilterController from './controllers/filter.js';
 import PointsModel from './models/points.js';
 import SiteMenuComponent from './components/menu.js';
-import FilterFormComponent from './components/filter.js';
+// import FilterFormComponent from './components/filter.js';
 import {renderElement} from './utils/render.js';
-import {FILTERS, MENU_ITEMS} from './const.js';
+import {MENU_ITEMS} from './const.js';
 import {generateEvents} from './mock/mock.js';
 
 
 const tripMenu = document.querySelector(`.trip-main__trip-controls`);
-
-renderElement(tripMenu, new SiteMenuComponent(MENU_ITEMS));
-renderElement(tripMenu, new FilterFormComponent(FILTERS));
-
-const tripEvents = document.querySelector(`.trip-events`);
 
 const events = generateEvents()
   .slice()
@@ -20,6 +16,13 @@ const events = generateEvents()
 
 const pointsModel = new PointsModel();
 pointsModel.setPoints(events);
+
+renderElement(tripMenu, new SiteMenuComponent(MENU_ITEMS));
+
+const filterController = new FilterController(tripMenu, pointsModel);
+filterController.render();
+
+const tripEvents = document.querySelector(`.trip-events`);
 
 const tripController = new TripController(tripEvents, pointsModel);
 tripController.render();

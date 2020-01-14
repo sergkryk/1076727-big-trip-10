@@ -3,7 +3,7 @@ import {EVENT_TYPES, CITIES, OFFERS, DESCRIPTIONS, EVENTS_COUNT} from '../const.
 
 const generateDate = () => {
   const day = 24 * 3600 * 1000;
-  return getRandomIntegerNumber(Date.now(), Date.now() + day * 7);
+  return Date.now() + getRandomIntegerNumber(-day, day * 3);
 };
 
 const generatePhotos = (description) => {

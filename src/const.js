@@ -60,11 +60,16 @@ const SORT_TYPE = {
   PRICE: `price`
 };
 
-const FILTERS = [
-  `everything`,
-  `future`,
-  `past`,
-];
+const MODE = {
+  DEFAULT: `default`,
+  EDIT: `edit`,
+};
+
+const FILTERS = {
+  EVERYTHING: `everything`,
+  FUTURE: `future`,
+  PAST: `past`
+};
 
 const MENU_ITEMS = [
   `Table`,
@@ -85,4 +90,4 @@ const DESCRIPTIONS = [
 ];
 
 
-export {EVENT_TYPES, CITIES, OFFERS, FILTERS, MENU_ITEMS, DESCRIPTIONS, EVENTS_COUNT, SORT_TYPE};
+export {EVENT_TYPES, CITIES, OFFERS, FILTERS, MENU_ITEMS, DESCRIPTIONS, EVENTS_COUNT, SORT_TYPE, MODE};
