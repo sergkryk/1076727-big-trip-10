@@ -41,7 +41,7 @@ filterController.render();
 const tripController = new TripController(tripEventsElement, pointsModel);
 tripController.render();
 
-const statisticsComponent = new StatisticsComponent();
+const statisticsComponent = new StatisticsComponent(pointsModel);
 renderElement(pageMainElement.querySelector(`.page-body__container`), statisticsComponent);
 statisticsComponent.hide();
 

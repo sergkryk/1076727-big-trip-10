@@ -1,18 +1,18 @@
 import {EVENT_TYPES} from '../const.js';
 
-const getRandomBool = () => Math.random() > 0.5;
+export const getRandomBool = () => Math.random() > 0.5;
 
-const getRandomIntegerNumber = (min, max) => {
+export const getRandomIntegerNumber = (min, max) => {
   return min + Math.floor(max * Math.random());
 };
 
-const getRandomArrayItem = (array) => {
+export const getRandomArrayItem = (array) => {
   const randomIndex = getRandomIntegerNumber(0, array.length);
 
   return array[randomIndex];
 };
 
-const shuffleArray = (array) => {
+export const shuffleArray = (array) => {
   for (let i = array.length - 1; i > 0; i--) {
     let random = Math.floor(Math.random() * (i + 1));
     let temp = array[random];
@@ -24,9 +24,9 @@ const shuffleArray = (array) => {
   return array;
 };
 
-const toUpperCaseFirstLetter = (string) => string.charAt(0).toUpperCase() + string.slice(1);
+export const toUpperCaseFirstLetter = (string) => string.charAt(0).toUpperCase() + string.slice(1);
 
-const formatEventTypePlaceholder = (eventType) => {
+export const formatEventTypePlaceholder = (eventType) => {
   const isTransfer = Object.keys(EVENT_TYPES)
      .some((category) => {
        return EVENT_TYPES[category]
@@ -38,12 +38,15 @@ const formatEventTypePlaceholder = (eventType) => {
     : toUpperCaseFirstLetter(`${eventType} in`);
 };
 
-export {
-  getRandomBool,
-  getRandomIntegerNumber,
-  getRandomArrayItem,
-  shuffleArray,
-  toUpperCaseFirstLetter,
-  formatEventTypePlaceholder
+export const sortObject = (unsortedObject) => {
+  const sortedObject = {};
+
+  Object.keys(unsortedObject)
+    .sort((a, b) => unsortedObject[b] - unsortedObject[a])
+    .forEach((item) => {
+      sortedObject[item] = unsortedObject[item];
+    });
+
+  return sortedObject;
 };
 

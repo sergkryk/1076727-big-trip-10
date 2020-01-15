@@ -139,7 +139,7 @@ export default class EventEdit extends AbstractSmartComponent {
     this._flatpickrStartDate = null;
     this._flatpickrEndDate = null;
 
-    this._applyFlatpickr();
+    this._applyFlatpickrs();
     this._subscribeOnEvents();
 
     this._deleteButtonClickHandler = null;
@@ -150,13 +150,8 @@ export default class EventEdit extends AbstractSmartComponent {
     this._isModeAdding = this._isModeAdding.bind(this);
   }
 
-  _applyFlatpickr() {
-    if (this._flatpickrStartDate && this._flatpickrEndDate) {
-      this._flatpickrStartDate.destroy();
-      this._flatpickrStartDate = null;
-      this._flatpickrEndDate.destroy();
-      this._flatpickrEndDate = null;
-    }
+  _applyFlatpickrs() {
+    this._deleteFlatpickrs();
 
     const startDateElement = this.getElement().querySelector(`#event-start-time-1`);
     const endDateElement = this.getElement().querySelector(`#event-end-time-1`);
@@ -188,6 +183,18 @@ export default class EventEdit extends AbstractSmartComponent {
         )
     );
 
+  }
+
+  _deleteFlatpickrs() {
+    if (this._flatpickrStartDate) {
+      this._flatpickrStartDate.destroy();
+      this._flatpickrStartDate = null;
+    }
+
+    if (this._flatpickrEndDate) {
+      this._flatpickrEndDate.destroy();
+      this._flatpickrEndDate = null;
+    }
   }
 
   _getFormElement() {
@@ -350,18 +357,14 @@ export default class EventEdit extends AbstractSmartComponent {
   }
 
   removeElement() {
-    if (this._flatpickr) {
-      this._flatpickr.destroy();
-      this._flatpickr = null;
-    }
-
+    this._deleteFlatpickrs();
     super.removeElement();
   }
 
 
   rerender() {
     super.rerender();
-    this._applyFlatpickr();
+    this._applyFlatpickrs();
   }
 
   reset() {
@@ -371,6 +374,7 @@ export default class EventEdit extends AbstractSmartComponent {
     this._price = event.price;
     this._startDate = event.startDate;
     this._endDate = event.endDate;
+
     this.rerender();
   }
 
