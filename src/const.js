@@ -1,6 +1,6 @@
-const EVENTS_COUNT = 10;
+export const EVENTS_COUNT = 10;
 
-const EVENT_TYPES = {
+export const EVENT_TYPES = {
   TRANSFERS: [
     `bus`,
     `drive`,
@@ -17,7 +17,7 @@ const EVENT_TYPES = {
   ]
 };
 
-const CITIES = [
+export const CITIES = [
   `Amsterdam`,
   `Rotterdam`,
   `Berlin`,
@@ -26,57 +26,64 @@ const CITIES = [
   `Paris`
 ];
 
-const OFFERS = [
+export const OFFERS = [
   {
-    type: `luggage`,
+    // type: `luggage`,
     title: `Add luggage`,
     price: 10
   },
   {
-    type: `comfort`,
+    // type: `comfort`,
     title: `Switch to comfort class`,
     price: 150
   },
   {
-    type: `meal`,
+    // type: `meal`,
     title: `Add meal`,
     price: 2
   },
   {
-    type: `seats`,
+    // type: `seats`,
     title: `Choose seats`,
     price: 9
   },
   {
-    type: `train`,
+    // type: `train`,
     title: `Travel by train`,
     price: 40
   }
 ];
 
-const SORT_TYPE = {
+export const MODE = {
+  ADDING: `adding`,
+  DEFAULT: `default`,
+  EDIT: `edit`,
+};
+
+export const SORT_TYPE = {
   EVENT: `event`,
   TIME: `time`,
   PRICE: `price`
 };
 
-const MODE = {
-  DEFAULT: `default`,
-  EDIT: `edit`,
-};
-
-const FILTERS = {
+export const FILTERS = {
   EVERYTHING: `everything`,
   FUTURE: `future`,
   PAST: `past`
 };
 
-const MENU_ITEMS = [
-  `Table`,
-  `Stats`
-];
+export const MENU_ITEMS = {
+  TABLE: `table`,
+  STATS: `stats`
+};
 
-const DESCRIPTIONS = [
+export const ChartTitle = {
+  MONEY: `money`,
+  TRANSPORT: `transport`,
+  TIME_SPENT: `time spent`
+};
+
+export const DESCRIPTIONS = [
   `Lorem ipsum dolor sit amet, consectetur adipiscing elit.`,
   `Cras aliquet varius magna, non porta ligula feugiat eget.`,
   `Fusce tristique felis at fermentum pharetra.`,
@@ -89,5 +96,25 @@ const DESCRIPTIONS = [
   `Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`
 ];
 
+export const EMPTY_POINT = {
+  id: String(Math.round(Date.now() * Math.random())),
+  type: `bus`,
+  destination: {
+    name: ``,
+    description: ``,
+    photos: [{
+      src: ``,
+      description: ``
+    }]
+  },
+  offers: [],
+  startDate: Date.now(),
+  endDate: Date.now(),
+  price: 0,
+  isFavorite: false
+};
 
-export {EVENT_TYPES, CITIES, OFFERS, FILTERS, MENU_ITEMS, DESCRIPTIONS, EVENTS_COUNT, SORT_TYPE, MODE};
+export const MenuItem = {
+  TABLE: `Table`,
+  STATS: `Stats`
+};

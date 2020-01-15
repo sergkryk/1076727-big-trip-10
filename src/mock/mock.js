@@ -50,7 +50,7 @@ const generateEvent = () => {
   const destination = Destinations[getRandomIntegerNumber(0, Destinations.length)];
 
   return {
-    id: String(new Date() + Math.random()),
+    id: String(Math.round(Date.now() * Math.random())),
     type: getRandomArrayItem([...EVENT_TYPES.TRANSFERS, ...EVENT_TYPES.ACTIVITIES]),
     destination,
     city: getRandomArrayItem(CITIES),
