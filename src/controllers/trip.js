@@ -51,6 +51,7 @@ export default class TripController {
     this._noEventsComponent = new NoEventsComponent();
     this._tripDaysList = new TripDaysListComponent();
     this._sortComponent = new SortFormComponent();
+    this._tripInfoComponent = null;
 
     this._onDataChange = this._onDataChange.bind(this);
     this._onFilterChange = this._onFilterChange.bind(this);
@@ -97,6 +98,7 @@ export default class TripController {
       }
     }
 
+    this._tripInfoComponent.rerender(this._pointsModel.getPointsAll());
     this._calculateTotalTripCost();
   }
 
@@ -118,7 +120,7 @@ export default class TripController {
         sortedPoints = points.slice().sort((a, b) => b.price - a.price);
         break;
       case SORT_TYPE.EVENT:
-        sortedPoints = points.slice();
+        sortedPoints = points.slice().sort((a, b) => a.startDate - b.startDate);
         break;
     }
     this._tripDaysList.getElement().innerHTML = ``;
@@ -169,7 +171,8 @@ export default class TripController {
     }
 
     const tripInfo = document.querySelector(`.trip-main__trip-info`);
-    renderElement(tripInfo, new TripInfoComponent(points), RenderPosition.AFTERBEGIN);
+    this._tripInfoComponent = new TripInfoComponent(this._pointsModel.getPointsAll());
+    renderElement(tripInfo, this._tripInfoComponent, RenderPosition.AFTERBEGIN);
 
     renderElement(this._container, this._sortComponent);
     renderElement(this._container, this._tripDaysList);
