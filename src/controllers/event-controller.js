@@ -114,7 +114,10 @@ export default class EventController {
     this._eventEditComponent.setRollupButtonClickHandler(() => this._replaceEditToEvent());
 
     this._eventEditComponent.setFavoriteClickHandler(() => {
-      this._onDataChange(this, event, Object.assign({}, event, {isFavorite: !event.isFavorite}));
+      const newEvent = EventModel.clone(event);
+      newEvent.isFavorite = !newEvent.isFavorite;
+
+      this._onDataChange(this, event, newEvent);
     });
 
     switch (mode) {
