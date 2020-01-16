@@ -1,20 +1,23 @@
 import EventComponent from '../components/event.js';
 import EventEditComponent from '../components/event-edit.js';
 import {renderElement, replaceElement, removeElement, RenderPosition} from '../utils/render.js';
-import {MODE, EMPTY_EVENT} from '../const.js';
+import {MODE, EMPTY_EVENT, DefaultButtonText, ActionButtonText} from '../const.js';
 import EventModel from '../models/event-model.js';
 import moment from "moment";
 import he from 'he';
 
+const SHAKE_ANIMATION_TIMEOUT = 600;
+
 const parseFormData = (formData, destinations) => {
-  const offers = [...document.querySelectorAll(`.event__offer-checkbox`)]
-    .filter((input) => input.checked)
-    .map((offer) => {
-      return {
-        title: offer.parentElement.querySelector(`.event__offer-title`).textContent.trim(),
-        price: parseInt(offer.parentElement.querySelector(`.event__offer-price`).textContent, 10)
-      };
-    });
+  const offers = formData.getAll(`event-offer`)
+     .map((title) => {
+       const input = document.querySelector(`input[value="${title}"]`);
+
+       return {
+         title,
+         price: parseInt(input.dataset.offerPrice, 10)
+       };
+     });
 
   const city = he.encode(formData.get(`event-destination`));
   const destination = destinations.find((item) => {
@@ -77,6 +80,14 @@ export default class EventController {
     this._mode = MODE.EDIT;
   }
 
+  blockEditForm() {
+    this._eventEditComponent.blockFormElements();
+  }
+
+  getMode() {
+    return this._mode;
+  }
+
   destroy() {
     removeElement(this._eventEditComponent);
     removeElement(this._eventComponent);
@@ -98,17 +109,29 @@ export default class EventController {
       document.addEventListener(`keydown`, this._onEscKeyDown);
     });
 
-    this._eventEditComponent.setDeleteButtonClickHandler(() =>
-      this._onDataChange(this, event, null)
-    );
-
     this._eventEditComponent.setSubmitClickHandler((evt) => {
       evt.preventDefault();
 
       const formData = this._eventEditComponent.getData();
       const data = parseFormData(formData, this._destinations);
 
+      this._eventEditComponent.setButtonText({
+        SAVE: ActionButtonText.SAVE
+      });
+
       this._onDataChange(this, event, data);
+    });
+
+    this._eventEditComponent.setDeleteButtonClickHandler(() => {
+      if (mode === MODE.ADDING) {
+        this._onDataChange(this, EMPTY_EVENT, null);
+      } else {
+        this._eventEditComponent.setButtonText({
+          DELETE: ActionButtonText.DELETE
+        });
+
+        this._onDataChange(this, event, null);
+      }
     });
 
     this._eventEditComponent.setRollupButtonClickHandler(() => this._replaceEditToEvent());
@@ -140,6 +163,20 @@ export default class EventController {
         renderElement(this._container, this._eventEditComponent, RenderPosition.AFTEREND);
         break;
     }
+  }
+
+  shake() {
+    this._eventEditComponent.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+    this._eventEditComponent.getElement().style.outline = `2px solid red`;
+
+    setTimeout(() => {
+      this._eventEditComponent.getElement().style.animation = ``;
+
+      this._eventEditComponent.setButtonText({
+        SAVE: DefaultButtonText.SAVE,
+        DELETE: DefaultButtonText.DELETE,
+      });
+    }, SHAKE_ANIMATION_TIMEOUT);
   }
 
   setDefaultView() {

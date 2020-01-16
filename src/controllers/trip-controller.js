@@ -46,6 +46,7 @@ export default class TripController {
     this._eventControllers = [];
     this._eventsModel = eventsModel;
     this._isSorted = true;
+    this._activeSortType = SORT_TYPE.EVENT;
     this._creatingEvent = null;
     this._api = api;
 
@@ -75,26 +76,69 @@ export default class TripController {
     document.querySelector(`.trip-info__cost-value`).textContent = totalPrice;
   }
 
+  _createNoEventsComponent() {
+    this._noEventsComponent = new NoEventsComponent();
+    renderElement(this._container, this._noEventsComponent);
+
+    this._removeTripSortComponent();
+  }
+
+  _createTripSortComponent() {
+    if (!this._sortComponent) {
+      this._sortComponent = new SortFormComponent();
+    }
+
+    renderElement(this._container, this._sortComponent, RenderPosition.AFTERBEGIN);
+  }
+
   _onDataChange(eventController, oldData, newData) {
     if (oldData === EMPTY_EVENT) {
       this._creatingEvent = null;
 
       if (newData === null) {
         eventController.destroy();
-        this._updateEvents();
+
+        if (eventController.getMode() === MODE.ADDING) {
+          this._toggleNoEventsComponent();
+        }
+
+        if (eventController.getMode() !== MODE.ADDING) {
+          this._updateEvents();
+        }
       } else {
-        this._eventsModel.addEvent(newData);
-        eventController.render(newData, MODE.DEFAULT);
+        eventController.blockEditForm();
 
-        this._eventControllers = [].concat(eventController, this._eventControllers);
+        this._api.createEvent(newData)
+           .then((eventModel) => {
+             this._eventsModel.addEvent(eventModel);
+             eventController.render(eventModel, MODE.DEFAULT);
 
-        this._removeEvents();
-        this._renderEvents(this._eventsModel.getEvents());
+             this._eventControllers = [].concat(eventController, this._eventControllers);
+
+             this._createTripSortComponent();
+
+             this._removeEvents();
+             this._renderEvents(this._eventsModel.getEvents());
+           })
+           .catch(() => {
+             eventController.shake();
+           });
       }
     } else if (newData === null) {
-      this._eventsModel.removeEvent(oldData.id);
-      this._updateEvents();
+      eventController.blockEditForm();
+
+      this._api.deleteEvent(oldData.id)
+         .then(() => {
+           this._eventsModel.removeEvent(oldData.id);
+           this._updateEvents();
+           this._toggleNoEventsComponent();
+         })
+          .catch(() => {
+            eventController.shake();
+          });
     } else {
+      eventController.blockEditForm();
+
       this._api.updateEvent(oldData.id, newData)
          .then((eventModel) => {
            const isSuccess = this._eventsModel.updateEvent(oldData.id, eventModel);
@@ -103,41 +147,39 @@ export default class TripController {
              eventController.render(eventModel, MODE.DEFAULT);
              this._updateEvents();
            }
-         });
-      // const isSuccess = this._eventsModel.updateEvent(oldData.id, newData);
-
-      // if (isSuccess) {
-      //   eventController.render(newData, MODE.DEFAULT);
-      // }
+         })
+          .catch(() => {
+            eventController.shake();
+          });
     }
 
-    this._tripInfoComponent.rerender(this._eventsModel.getEventsAll());
     this._calculateTotalTripCost();
-    this._toggleNoEventsComponent();
   }
 
   _onFilterChange() {
     this._updateEvents();
+    this._onSortTypeChange(this._activeSortType);
   }
 
   _onSortTypeChange(sortType) {
     let sortedEvents = [];
     const events = this._eventsModel.getEvents();
 
+    this._activeSortType = sortType;
     this._isSorted = sortType === SORT_TYPE.EVENT;
 
     switch (sortType) {
+      case SORT_TYPE.EVENT:
+        sortedEvents = events.slice().sort((a, b) => a.startDate - b.startDate);
+        break;
       case SORT_TYPE.TIME:
         sortedEvents = events.slice().sort((a, b) => (b.endDate - b.startDate) - (a.endDate - a.startDate));
         break;
       case SORT_TYPE.PRICE:
         sortedEvents = events.slice().sort((a, b) => b.price - a.price);
         break;
-      case SORT_TYPE.EVENT:
-        sortedEvents = events.slice().sort((a, b) => a.startDate - b.startDate);
-        break;
     }
-    this._tripDaysList.getElement().innerHTML = ``;
+    this._removeEvents();
     this._renderEvents(sortedEvents);
   }
 
@@ -158,6 +200,13 @@ export default class TripController {
     }
   }
 
+  _removeTripSortComponent() {
+    if (this._sortComponent) {
+      removeElement(this._sortComponent);
+      this._sortComponent = null;
+    }
+  }
+
   _renderEvents(events) {
     this._eventControllers = renderEvents(
         this._tripDaysList.getElement(),
@@ -169,24 +218,18 @@ export default class TripController {
         this._isSorted
     );
 
+    this._tripInfoComponent.rerender(this._eventsModel.getEventsAll());
     this._calculateTotalTripCost();
-  }
-
-  _renderSortComponent() {
-    if (!this._sortComponent) {
-      this._sortComponent = new SortFormComponent();
-    }
-
-    renderElement(this._container, this._sortComponent, RenderPosition.AFTERBEGIN);
   }
 
   _toggleNoEventsComponent() {
     if (this._eventsModel.isNoEvents()) {
-      this._noEventsComponent = new NoEventsComponent();
-      renderElement(this._container, this._noEventsComponent);
+      // this._noEventsComponent = new NoEventsComponent();
+      // renderElement(this._container, this._noEventsComponent);
 
-      removeElement(this._sortComponent);
-      this._sortComponent = null;
+      // removeElement(this._sortComponent);
+      // this._sortComponent = null;
+      this._createNoEventsComponent();
     } else {
       this._removeNoEventsComponent();
     }
@@ -202,11 +245,21 @@ export default class TripController {
       return;
     }
 
-    this._renderSortComponent();
+    const container = this._eventsModel.isNoEvents()
+      ? document.querySelector(`.trip-events h2`)
+      : this._sortComponent.getElement();
+
+
+    this._eventControllers.forEach((it) => it.setDefaultView());
+
+    // this._renderSortComponent();
+    if (!this._eventsModel.isNoEvents()) {
+      this._createTripSortComponent();
+    }
     this._removeNoEventsComponent();
 
     this._creatingEvent = new EventController(
-        this._sortComponent.getElement(),
+        container,
         this._onDataChange,
         this._onViewChange,
         this._destinations,
@@ -230,8 +283,10 @@ export default class TripController {
     this._tripInfoComponent = new TripInfoComponent(this._eventsModel.getEventsAll());
     renderElement(tripInfo, this._tripInfoComponent, RenderPosition.AFTERBEGIN);
 
-    this._renderSortComponent();
+    // this._renderSortComponent();
     renderElement(container, this._tripDaysList);
+
+    this._createTripSortComponent();
     this._toggleNoEventsComponent();
     this._renderEvents(events);
 

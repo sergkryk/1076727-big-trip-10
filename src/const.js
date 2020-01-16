@@ -102,7 +102,6 @@ export const DESCRIPTIONS = [
 ];
 
 export const EMPTY_EVENT = {
-  id: String(Math.round(Date.now() * Math.random())),
   type: `bus`,
   destination: {
     name: ``,
@@ -122,4 +121,15 @@ export const EMPTY_EVENT = {
 export const MenuItem = {
   TABLE: `Table`,
   STATS: `Stats`
+};
+
+export const DefaultButtonText = {
+  SAVE: `Save`,
+  DELETE: `Delete`,
+  CANCEL: `Cancel`
+};
+
+export const ActionButtonText = {
+  SAVE: `Saving...`,
+  DELETE: `Deleting...`
 };
