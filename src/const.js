@@ -5,7 +5,7 @@ export const RequestMethod = {
   DELETE: `DELETE`
 };
 
-export const AUTHORIZATION = `Basic Pn64vTMaYXczdwZ47yC86`;
+export const AUTHORIZATION = `Basic Pn64vTMaYXczdwZ47yC8W`;
 export const END_POINT = `https://htmlacademy-es-10.appspot.com/big-trip`;
 
 export const EVENTS_COUNT = 5;
