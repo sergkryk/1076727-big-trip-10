@@ -35,7 +35,7 @@ const Destinations = CITIES.map((city) => {
   return {
     name: city,
     description: generateDescription(DESCRIPTIONS),
-    photos: generatePhotos(city)
+    pictures: generatePhotos(city)
   };
 });
 
@@ -54,7 +54,7 @@ const generateEvent = () => {
     type: getRandomArrayItem([...EVENT_TYPES.TRANSFERS, ...EVENT_TYPES.ACTIVITIES]),
     destination,
     city: getRandomArrayItem(CITIES),
-    photos: generatePhotos(),
+    pictures: generatePhotos(),
     offers: generateOffers(),
     description: generateDescription(DESCRIPTIONS),
     startDate: Math.min(firstDate, secondDate),

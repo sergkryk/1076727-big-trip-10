@@ -1,4 +1,14 @@
-export const EVENTS_COUNT = 10;
+export const RequestMethod = {
+  GET: `GET`,
+  POST: `POST`,
+  PUT: `PUT`,
+  DELETE: `DELETE`
+};
+
+export const AUTHORIZATION = `Basic Pn64vTMaYXczdwZ47yC86`;
+export const END_POINT = `https://htmlacademy-es-10.appspot.com/big-trip`;
+
+export const EVENTS_COUNT = 5;
 
 export const EVENT_TYPES = {
   TRANSFERS: [
@@ -28,27 +38,22 @@ export const CITIES = [
 
 export const OFFERS = [
   {
-    // type: `luggage`,
     title: `Add luggage`,
     price: 10
   },
   {
-    // type: `comfort`,
     title: `Switch to comfort class`,
     price: 150
   },
   {
-    // type: `meal`,
     title: `Add meal`,
     price: 2
   },
   {
-    // type: `seats`,
     title: `Choose seats`,
     price: 9
   },
   {
-    // type: `train`,
     title: `Travel by train`,
     price: 40
   }
@@ -96,13 +101,13 @@ export const DESCRIPTIONS = [
   `Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`
 ];
 
-export const EMPTY_POINT = {
+export const EMPTY_EVENT = {
   id: String(Math.round(Date.now() * Math.random())),
   type: `bus`,
   destination: {
     name: ``,
     description: ``,
-    photos: [{
+    pictures: [{
       src: ``,
       description: ``
     }]

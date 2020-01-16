@@ -1,14 +1,49 @@
 import EventComponent from '../components/event.js';
 import EventEditComponent from '../components/event-edit.js';
 import {renderElement, replaceElement, removeElement, RenderPosition} from '../utils/render.js';
-import {MODE, EMPTY_POINT} from '../const.js';
+import {MODE, EMPTY_EVENT} from '../const.js';
+import EventModel from '../models/event-model.js';
+import moment from "moment";
+import he from 'he';
 
-export default class PointController {
-  constructor(container, onDataChange, onViewChange) {
+const parseFormData = (formData, destinations) => {
+  const offers = [...document.querySelectorAll(`.event__offer-checkbox`)]
+    .filter((input) => input.checked)
+    .map((offer) => {
+      return {
+        title: offer.parentElement.querySelector(`.event__offer-title`).textContent.trim(),
+        price: parseInt(offer.parentElement.querySelector(`.event__offer-price`).textContent, 10)
+      };
+    });
+
+  const city = he.encode(formData.get(`event-destination`));
+  const destination = destinations.find((item) => {
+    return city === item.name;
+  });
+
+  const startDate = moment(formData.get(`event-start-time`), `DD/MM/YY HH:mm`).valueOf();
+  const endDate = moment(formData.get(`event-end-time`), `DD/MM/YY HH:mm`).valueOf();
+
+  return new EventModel({
+    'type': formData.get(`event-type`),
+    'destination': destination,
+    'offers': offers,
+    'date_from': moment(startDate).toISOString(),
+    'date_to': moment(endDate).toISOString(),
+    'base_price': parseInt(formData.get(`event-price`), 10),
+    'is_favorite': formData.get(`event-favorite`) === `on`
+  });
+};
+
+export default class EventController {
+  constructor(container, onDataChange, onViewChange, destinations, offers) {
     this._container = container;
 
     this._onDataChange = onDataChange;
     this._onViewChange = onViewChange;
+
+    this._destinations = destinations;
+    this._offers = offers;
 
     this._mode = MODE.DEFAULT;
 
@@ -22,7 +57,7 @@ export default class PointController {
 
     if (isEscKey) {
       if (this._mode === MODE.ADDING) {
-        this._onDataChange(this, EMPTY_POINT, null);
+        this._onDataChange(this, EMPTY_EVENT, null);
       }
 
       this._replaceEditToEvent();
@@ -49,14 +84,14 @@ export default class PointController {
     document.removeEventListener(`keydown`, this._onEscKeyDown);
   }
 
-  render(point, mode) {
+  render(event, mode) {
     const oldEventComponent = this._eventComponent;
     const oldEventEditComponent = this._eventEditComponent;
 
     this._mode = mode;
 
-    this._eventComponent = new EventComponent(point);
-    this._eventEditComponent = new EventEditComponent(point, this._mode);
+    this._eventComponent = new EventComponent(event);
+    this._eventEditComponent = new EventEditComponent(event, this._mode, this._destinations, this._offers);
 
     this._eventComponent.setRollUpButtonClickHandler(() => {
       this._replaceEventToEdit();
@@ -64,20 +99,22 @@ export default class PointController {
     });
 
     this._eventEditComponent.setDeleteButtonClickHandler(() =>
-      this._onDataChange(this, point, null)
+      this._onDataChange(this, event, null)
     );
 
     this._eventEditComponent.setSubmitClickHandler((evt) => {
       evt.preventDefault();
 
-      const data = this._eventEditComponent.getData();
-      this._onDataChange(this, point, Object.assign({}, data, {id: point.id}));
+      const formData = this._eventEditComponent.getData();
+      const data = parseFormData(formData, this._destinations);
+
+      this._onDataChange(this, event, data);
     });
 
     this._eventEditComponent.setRollupButtonClickHandler(() => this._replaceEditToEvent());
 
     this._eventEditComponent.setFavoriteClickHandler(() => {
-      this._onDataChange(this, point, Object.assign({}, point, {isFavorite: !point.isFavorite}));
+      this._onDataChange(this, event, Object.assign({}, event, {isFavorite: !event.isFavorite}));
     });
 
     switch (mode) {
