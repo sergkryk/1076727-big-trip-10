@@ -228,11 +228,6 @@ export default class TripController {
 
   _toggleNoEventsComponent() {
     if (this._eventsModel.isNoEvents()) {
-      // this._noEventsComponent = new NoEventsComponent();
-      // renderElement(this._container, this._noEventsComponent);
-
-      // removeElement(this._sortComponent);
-      // this._sortComponent = null;
       this._createNoEventsComponent();
     } else {
       this._removeNoEventsComponent();
@@ -256,7 +251,6 @@ export default class TripController {
 
     this._eventControllers.forEach((it) => it.setDefaultView());
 
-    // this._renderSortComponent();
     if (!this._eventsModel.isNoEvents()) {
       this._createTripSortComponent();
     }
@@ -286,8 +280,6 @@ export default class TripController {
     const tripInfo = document.querySelector(`.trip-main__trip-info`);
     this._tripInfoComponent = new TripInfoComponent(this._eventsModel.getEventsAll());
     renderElement(tripInfo, this._tripInfoComponent, RenderPosition.AFTERBEGIN);
-
-    // this._renderSortComponent();
     renderElement(container, this._tripDaysList);
 
     this._createTripSortComponent();

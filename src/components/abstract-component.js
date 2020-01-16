@@ -24,7 +24,6 @@ export default class AbstractComponent {
 
   hide() {
     if (this._element) {
-      // console.log(this._element);
       this._element.classList.add(HIDDEN_CLASS);
     }
   }

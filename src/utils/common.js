@@ -49,4 +49,3 @@ export const sortObject = (unsortedObject) => {
 
   return sortedObject;
 };
-
