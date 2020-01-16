@@ -1,26 +1,26 @@
 import {FILTERS} from '../const.js';
 
-export const getEverythingPoints = (points) => {
-  return points.slice().sort((a, b) => a.startDate - b.startDate);
+export const getEverythingEvents = (events) => {
+  return events.slice().sort((a, b) => a.startDate - b.startDate);
 };
 
-export const getFuturePoints = (points) => {
-  return points.filter((point) => point.startDate > Date.now());
+export const getFutureEvents = (events) => {
+  return events.filter((event) => event.startDate > Date.now());
 };
 
-export const getPastPoints = (points) => {
-  return points.filter((point) => point.startDate < Date.now());
+export const getPastEvents = (events) => {
+  return events.filter((event) => event.startDate < Date.now());
 };
 
-export const getPointsByFilter = (points, filterType) => {
+export const getEventsByFilter = (events, filterType) => {
   switch (filterType) {
     case FILTERS.EVERYTHING:
-      return getEverythingPoints(points);
+      return getEverythingEvents(events);
     case FILTERS.FUTURE:
-      return getFuturePoints(points);
+      return getFutureEvents(events);
     case FILTERS.PAST:
-      return getPastPoints(points);
+      return getPastEvents(events);
   }
 
-  return points;
+  return events;
 };

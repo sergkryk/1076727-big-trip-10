@@ -3,9 +3,9 @@ import {replaceElement, renderElement} from '../utils/render.js';
 import {FILTERS} from '../const.js';
 
 export default class FilterController {
-  constructor(container, pointsModel) {
+  constructor(container, eventsModel) {
     this._container = container;
-    this._pointsModel = pointsModel;
+    this._eventsModel = eventsModel;
 
     this._activeFilterType = FILTERS.EVERYTHING;
     this._filterComponent = null;
@@ -13,7 +13,7 @@ export default class FilterController {
     this._onDataChange = this._onDataChange.bind(this);
     this._onFilterChange = this._onFilterChange.bind(this);
 
-    this._pointsModel.setDataChangeHandler(this._onDataChange);
+    this._eventsModel.setDataChangeHandler(this._onDataChange);
   }
 
   _onDataChange() {
@@ -21,7 +21,7 @@ export default class FilterController {
   }
 
   _onFilterChange(filterType) {
-    this._pointsModel.setFilter(filterType);
+    this._eventsModel.setFilter(filterType);
     this._activeFilterType = filterType;
   }
 

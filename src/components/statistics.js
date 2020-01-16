@@ -6,11 +6,11 @@ import ChartDataLabels from "chartjs-plugin-datalabels";
 import moment from "moment";
 
 export default class Statistics extends AbstractSmartComponent {
-  constructor(pointsModel) {
+  constructor(eventsModel) {
     super();
 
-    this._pointsModel = pointsModel;
-    this._points = null;
+    this._eventsModel = eventsModel;
+    this._events = null;
 
     this._moneyChart = null;
     this._transportChart = null;
@@ -102,7 +102,7 @@ export default class Statistics extends AbstractSmartComponent {
   }
 
   _getMoneyData() {
-    const data = this._points.reduce((acc, {type, price}) => {
+    const data = this._events.reduce((acc, {type, price}) => {
       const value = acc[type] || 0;
       acc[type] = value + price;
 
@@ -113,7 +113,7 @@ export default class Statistics extends AbstractSmartComponent {
   }
 
   _getTimeData() {
-    const data = this._points.reduce((acc, {type, startDate, endDate}) => {
+    const data = this._events.reduce((acc, {type, startDate, endDate}) => {
       const value = acc[type] || 0;
       acc[type] = value + endDate - startDate;
 
@@ -128,7 +128,7 @@ export default class Statistics extends AbstractSmartComponent {
   }
 
   _getTransportData() {
-    const data = this._points.reduce((acc, {type}) => {
+    const data = this._events.reduce((acc, {type}) => {
       const isTransfer = Object.keys(EVENT_TYPES)
         .some((category) => {
           return EVENT_TYPES[category]
@@ -218,7 +218,7 @@ export default class Statistics extends AbstractSmartComponent {
   }
 
   rerender() {
-    this._points = this._pointsModel.getPointsAll();
+    this._events = this._eventsModel.getEventsAll();
 
     super.rerender();
     this._renderCharts();

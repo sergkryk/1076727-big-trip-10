@@ -1,26 +1,20 @@
-import TripController from './controllers/trip.js';
+import Api from './api/api.js';
+import TripController from './controllers/trip-controller.js';
 import StatisticsComponent from './components/statistics.js';
-import FilterController from './controllers/filter.js';
-import PointsModel from './models/points.js';
+import FilterController from './controllers/filter-controller.js';
+import EventsModel from './models/events-model.js';
 import SiteMenuComponent from './components/menu.js';
 import {renderElement, RenderPosition} from './utils/render.js';
-import {MenuItem} from './const.js';
-import {generateEvents} from './mock/mock.js';
+import {MenuItem, AUTHORIZATION, END_POINT} from './const.js';
 
-
-// const tripMenu = document.querySelector(`.trip-main__trip-controls`);
 const tripControlsElement = document.querySelector(`.trip-main__trip-controls`);
 const tripEventsElement = document.querySelector(`.trip-events`);
 const pageMainElement = document.querySelector(`.page-main`);
 
-const events = generateEvents()
-  .slice()
-  .sort((a, b) => a.startDate - b.startDate);
+const api = new Api(END_POINT, AUTHORIZATION);
 
-const pointsModel = new PointsModel();
-pointsModel.setPoints(events);
+const eventsModel = new EventsModel();
 
-// renderElement(tripMenu, new SiteMenuComponent(MENU_ITEMS));
 const menuItems = Object.values(MenuItem)
    .map((item) => {
      return {
@@ -29,25 +23,23 @@ const menuItems = Object.values(MenuItem)
      };
    });
 
-// const filterController = new FilterController(tripMenu, pointsModel);
-// filterController.render();
 const menuComponent = new SiteMenuComponent(menuItems);
+
+const filterController = new FilterController(tripControlsElement, eventsModel);
+
+const tripController = new TripController(tripEventsElement, eventsModel, api);
+
+const statisticsComponent = new StatisticsComponent(eventsModel);
+
 renderElement(tripControlsElement, menuComponent, RenderPosition.AFTERBEGIN);
-
-// const tripEvents = document.querySelector(`.trip-events`);
-const filterController = new FilterController(tripControlsElement, pointsModel);
 filterController.render();
-
-const tripController = new TripController(tripEventsElement, pointsModel);
-tripController.render();
-
-const statisticsComponent = new StatisticsComponent(pointsModel);
 renderElement(pageMainElement.querySelector(`.page-body__container`), statisticsComponent);
+
 statisticsComponent.hide();
 
 document.querySelector(`.trip-main__event-add-btn`)
    .addEventListener(`click`, () => {
-     tripController.createPoint();
+     tripController.createEvent();
    });
 
 menuComponent.setItemClickHandler((menuItem) => {
@@ -64,3 +56,11 @@ menuComponent.setItemClickHandler((menuItem) => {
       break;
   }
 });
+
+Promise.all([api.getDestinations(), api.getOffers(), api.getEvents()])
+   .then((response) => {
+     tripController.setDestinations(response[0]);
+     tripController.setOffers(response[1]);
+     eventsModel.setEvents(response[2]);
+     tripController.render();
+   });

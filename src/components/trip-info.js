@@ -1,21 +1,7 @@
-import AbstractComponent from './abstract-component.js';
+import AbstractSmartComponent from './abstract-smart-component.js';
 import {formatMonth, formatDay} from '../utils/format.js';
 
 const SHOWING_CITIES_COUNT = 3;
-
-const getTitle = (events) => {
-  if (events.length > SHOWING_CITIES_COUNT) {
-    return `
-      ${events[0].city} &mdash; ... &mdash; ${events[events.length - 1].city}
-    `;
-  } else {
-    return events
-      .map((event, index) => {
-        return `${event.city} ${index < events.length - 1 ? `-` : ``} `;
-      })
-      .join(``);
-  }
-};
 
 const getDates = (startDate, endDate) => {
   const startMonth = formatMonth(startDate);
@@ -26,22 +12,43 @@ const getDates = (startDate, endDate) => {
   return `${startMonth} ${startDay} &nbsp;&mdash;&nbsp; ${endMonth} ${endDay}`;
 };
 
-
-const createTripInfoTemplate = (events) => {
-  return `<div class="trip-info__main">
-    <h1 class="trip-info__title">${getTitle(events)}</h1>
-    <p class="trip-info__dates">${getDates(events[0].startDate, events[events.length - 1].endDate)}</p>
-  </div>
-  `;
+const getTitle = (events) => {
+  if (events.length > SHOWING_CITIES_COUNT) {
+    return `${events[0].destination.name} &mdash; ... &mdash; ${events[events.length - 1].destination.name}`;
+  } else {
+    return events
+      .map((event, index) => {
+        return `${event.city} ${index < events.length - 1 ? `-` : ``} `;
+      })
+      .join(``);
+  }
 };
 
-export default class TripInfo extends AbstractComponent {
+export default class TripInfo extends AbstractSmartComponent {
   constructor(events) {
     super();
     this._events = events;
   }
 
   getTemplate() {
-    return createTripInfoTemplate(this._events);
+    if (this._events.length === 0) {
+      return `<div class="trip-info__main"></div>`;
+    }
+
+    const dates = getDates(this._events[0].startDate, this._events[this._events.length - 1].startDate);
+
+    return `<div class="trip-info__main">
+        <h1 class="trip-info__title">${getTitle(this._events)}</h1>
+        <p class="trip-info__dates">${dates}</p>
+       </div>
+     `;
+  }
+
+  recoveryListeners() {}
+
+  rerender(events) {
+    this._events = events.slice().sort((a, b) => a.startDate - b.startDate);
+
+    super.rerender();
   }
 }

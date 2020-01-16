@@ -1,9 +1,9 @@
 import {FILTERS} from '../const.js';
-import {getPointsByFilter} from '../utils/filter.js';
+import {getEventsByFilter} from '../utils/filter.js';
 
-export default class Points {
+export default class Events {
   constructor() {
-    this._points = [];
+    this._events = [];
     this._activeFilterType = FILTERS.EVERYTHING;
 
     this._dataChangeHandlers = [];
@@ -14,27 +14,31 @@ export default class Points {
     handlers.forEach((handler) => handler());
   }
 
-  addPoint(point) {
-    this._point = [].concat(point, this._points);
+  addEvent(event) {
+    this._event = [].concat(event, this._events);
     this._callHandlers(this._dataChangeHandlers);
   }
 
-  getPoints() {
-    return getPointsByFilter(this._points, this._activeFilterType);
+  getEvents() {
+    return getEventsByFilter(this._events, this._activeFilterType);
   }
 
-  getPointsAll() {
-    return this._points;
+  getEventsAll() {
+    return this._events;
   }
 
-  removePoint(id) {
-    const index = this._points.findIndex((it) => it.id === id);
+  isNoEvents() {
+    return this.getEventsAll().length === 0;
+  }
+
+  removeEvent(id) {
+    const index = this._events.findIndex((it) => it.id === id);
 
     if (index === -1) {
       return false;
     }
 
-    this._points = [].concat(this._points.slice(0, index), this._points.slice(index + 1));
+    this._events = [].concat(this._events.slice(0, index), this._events.slice(index + 1));
 
     this._callHandlers(this._dataChangeHandlers);
 
@@ -45,8 +49,8 @@ export default class Points {
     this._dataChangeHandlers.push(handler);
   }
 
-  setPoints(points) {
-    this._points = Array.from(points);
+  setEvents(events) {
+    this._events = Array.from(events);
     this._callHandlers(this._dataChangeHandlers);
   }
 
@@ -59,14 +63,14 @@ export default class Points {
     this._filterChangeHandlers.push(handler);
   }
 
-  updatePoint(id, point) {
-    const index = this._points.findIndex((it) => it.id === id);
+  updateEvent(id, event) {
+    const index = this._events.findIndex((it) => it.id === id);
 
     if (index === -1) {
       return false;
     }
 
-    this._points = [].concat(this._points.slice(0, index), point, this._points.slice(index + 1));
+    this._events = [].concat(this._events.slice(0, index), event, this._events.slice(index + 1));
 
     this._callHandlers(this._dataChangeHandlers);
 
