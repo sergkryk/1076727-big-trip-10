@@ -1,6 +1,7 @@
 import FilterComponent from '../components/filter.js';
 import {replaceElement, renderElement} from '../utils/render.js';
 import {FILTERS} from '../const.js';
+import {getEventsByFilter} from '../utils/filter.js';
 
 export default class FilterController {
   constructor(container, eventsModel) {
@@ -27,12 +28,14 @@ export default class FilterController {
 
   render() {
     const container = this._container;
+    const events = this._eventsModel.getEventsAll();
 
     const filters = Object.values(FILTERS)
       .map((filterType) => {
         return {
           name: filterType,
-          checked: filterType === this._activeFilterType
+          checked: filterType === this._activeFilterType,
+          disabled: getEventsByFilter(events, filterType).length === 0
         };
       });
 

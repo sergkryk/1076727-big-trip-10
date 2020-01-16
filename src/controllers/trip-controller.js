@@ -138,14 +138,18 @@ export default class TripController {
           });
     } else {
       eventController.blockEditForm();
+      const isFavoriteChanged = oldData.isFavorite !== newData.isFavorite;
 
       this._api.updateEvent(oldData.id, newData)
          .then((eventModel) => {
            const isSuccess = this._eventsModel.updateEvent(oldData.id, eventModel);
 
            if (isSuccess) {
-             eventController.render(eventModel, MODE.DEFAULT);
-             this._updateEvents();
+             eventController.render(eventModel, MODE.DEFAULT, isFavoriteChanged);
+
+             if (!isFavoriteChanged) {
+               this._updateEvents();
+             }
            }
          })
           .catch(() => {
@@ -306,5 +310,9 @@ export default class TripController {
 
   show() {
     this._container.classList.remove(HIDDEN_CLASS);
+  }
+
+  updateEvents() {
+    this._updateEvents();
   }
 }

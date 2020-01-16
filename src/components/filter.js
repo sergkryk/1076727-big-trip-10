@@ -2,10 +2,7 @@ import AbstractComponent from './abstract-component.js';
 
 const FILTER_ID_PREFIX = `filter-`;
 
-const createFilterMarkup = ((filter, isChecked) => {
-  const {
-    name
-  } = filter;
+const createFilterMarkup = ((name, isChecked, isDisabled) => {
 
   return `
   <div class="trip-filters__filter">
@@ -16,6 +13,7 @@ const createFilterMarkup = ((filter, isChecked) => {
     name="trip-filter"
     value="${name}"
     ${isChecked ? `checked` : ``}
+    ${isDisabled ? `disabled` : ``}
   >
   <label class="trip-filters__filter-label" for="filter-${name}">
     ${name}
@@ -36,7 +34,7 @@ export default class FilterForm extends AbstractComponent {
 
   getTemplate() {
     const filtersMarkup = this._filters
-      .map((filter) => createFilterMarkup(filter, filter.checked))
+      .map(({name, checked, disabled}) => createFilterMarkup(name, checked, disabled))
       .join(``);
 
     return `<form class="trip-filters" action="#" method="get">

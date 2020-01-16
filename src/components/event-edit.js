@@ -1,6 +1,5 @@
 import {formatDate, formatTime} from '../utils/format.js';
-import {EVENT_TYPES, DefaultButtonText} from '../const.js';
-import {MODE} from '../const.js';
+import {DEBOUNCE_TIMEOUT, MODE, EVENT_TYPES, DefaultButtonText} from '../const.js';
 import AbstractSmartComponent from './abstract-smart-component.js';
 import {toUpperCaseFirstLetter, formatEventTypePlaceholder} from '../utils/common.js';
 import flatpickr from 'flatpickr';
@@ -8,6 +7,7 @@ import "flatpickr/dist/flatpickr.min.css";
 import "flatpickr/dist/themes/material_blue.css";
 import moment from "moment";
 import nanoid from 'nanoid';
+import debounce from 'lodash/debounce';
 
 const createDestinationsMarkup = (destinations) => {
   return destinations
@@ -353,6 +353,7 @@ export default class EventEdit extends AbstractSmartComponent {
 
   rerender() {
     super.rerender();
+    this.recoveryListeners();
     this._applyFlatpickrs();
   }
 
@@ -385,7 +386,7 @@ export default class EventEdit extends AbstractSmartComponent {
     const element = this.getElement().querySelector(`.event__favorite-checkbox`);
 
     if (element) {
-      element.addEventListener(`change`, handler);
+      element.addEventListener(`change`, debounce(handler, DEBOUNCE_TIMEOUT));
     }
 
     this._favoriteClickHandler = handler;

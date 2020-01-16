@@ -26,7 +26,7 @@ export default class Provider {
     if (this._isOnLine()) {
       return this._api.createEvent(event)
         .then((newEvent) => {
-          this._store.setItem(`points`, [].concat(events, newEvent.toRAW()));
+          this._store.setItem(`points`, [].concat(events, newEvent.toRaw()));
 
           return newEvent;
         });
@@ -34,13 +34,13 @@ export default class Provider {
 
     const fakeNewEventId = nanoid();
     const fakeNewEvent = EventModel.parseEvent(
-        Object.assign({}, event.toRAW(), {
+        Object.assign({}, event.toRaw(), {
           id: fakeNewEventId
         }));
 
     this._isSynchronized = false;
 
-    this._store.setItem(`points`, [].concat(events, fakeNewEvent.toRAW()));
+    this._store.setItem(`points`, [].concat(events, fakeNewEvent.toRaw()));
 
     return Promise.resolve(fakeNewEvent);
   }
@@ -81,7 +81,7 @@ export default class Provider {
     if (this._isOnLine()) {
       return this._api.getEvents()
         .then((events) => {
-          this._store.setItem(`points`, events.map((event) => event.toRAW()));
+          this._store.setItem(`points`, events.map((event) => event.toRaw()));
 
           return events;
         });
@@ -122,11 +122,12 @@ export default class Provider {
           const createdEvents = response.created;
           const updatedEvents = getSyncedEvents(response.updated);
 
-          this._store.setItem(`points`, [...updatedEvents, ...createdEvents]);
+          const synchronizedEvents = [...updatedEvents, ...createdEvents];
+          this._store.setItem(`points`, synchronizedEvents);
 
           this._isSynchronized = true;
 
-          return Promise.resolve();
+          return Promise.resolve(synchronizedEvents);
         });
     }
 
@@ -145,7 +146,7 @@ export default class Provider {
               `points`,
               [].concat(
                   events.slice(0, index),
-                  newEvent.toRAW(),
+                  newEvent.toRaw(),
                   events.slice(index + 1)
               )
           );
@@ -155,7 +156,7 @@ export default class Provider {
     }
 
     const fakeUpdatedEvent = EventModel.parseEvent(
-        Object.assign({}, event.toRAW(), {
+        Object.assign({}, event.toRaw(), {
           id
         }));
 
@@ -165,7 +166,7 @@ export default class Provider {
         `points`,
         [].concat(
             events.slice(0, index),
-            fakeUpdatedEvent.toRAW(),
+            fakeUpdatedEvent.toRaw(),
             events.slice(index + 1)
         )
     );
