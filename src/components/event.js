@@ -1,6 +1,6 @@
-import {formatDateTime, formatTime, formatDuration} from '../utils/format.js';
-import AbstractComponent from './abstract-component.js';
-import {formatEventTypePlaceholder} from '../utils/common.js';
+import {formatDateTime, formatTime, formatDuration} from '../utils/format';
+import AbstractComponent from './abstract-component';
+import {formatEventTypePlaceholder} from '../utils/common';
 
 
 const OFFERS_MAX_VIEWING = 3;

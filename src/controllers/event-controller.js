@@ -1,8 +1,8 @@
-import EventComponent from '../components/event.js';
-import EventEditComponent from '../components/event-edit.js';
-import {renderElement, replaceElement, removeElement, RenderPosition} from '../utils/render.js';
-import {MODE, EMPTY_EVENT, DefaultButtonText, ActionButtonText} from '../const.js';
-import EventModel from '../models/event-model.js';
+import EventComponent from '../components/event';
+import EventEditComponent from '../components/event-edit';
+import {renderElement, replaceElement, removeElement, RenderPosition} from '../utils/render';
+import {MODE, EMPTY_EVENT, DefaultButtonText, ActionButtonText} from '../const';
+import EventModel from '../models/event-model';
 import moment from "moment";
 import he from 'he';
 
@@ -95,7 +95,7 @@ export default class EventController {
     document.removeEventListener(`keydown`, this._onEscKeyDown);
   }
 
-  render(event, mode) {
+  render(event, mode, isFavoriteChanged) {
     const oldEventComponent = this._eventComponent;
     const oldEventEditComponent = this._eventEditComponent;
 
@@ -148,7 +148,10 @@ export default class EventController {
         if (oldEventEditComponent && oldEventComponent) {
           replaceElement(this._eventComponent, oldEventComponent);
           replaceElement(this._eventEditComponent, oldEventEditComponent);
-          this._replaceEditToEvent();
+
+          if (!isFavoriteChanged) {
+            this._replaceEditToEvent();
+          }
         } else {
           renderElement(this._container, this._eventComponent);
         }

@@ -1,13 +1,13 @@
-import {formatDate, formatTime} from '../utils/format.js';
-import {EVENT_TYPES, DefaultButtonText} from '../const.js';
-import {MODE} from '../const.js';
-import AbstractSmartComponent from './abstract-smart-component.js';
-import {toUpperCaseFirstLetter, formatEventTypePlaceholder} from '../utils/common.js';
+import {formatDate, formatTime} from '../utils/format';
+import {DEBOUNCE_TIMEOUT, MODE, EVENT_TYPES, DefaultButtonText} from '../const';
+import AbstractSmartComponent from './abstract-smart-component';
+import {toUpperCaseFirstLetter, formatEventTypePlaceholder} from '../utils/common';
 import flatpickr from 'flatpickr';
 import "flatpickr/dist/flatpickr.min.css";
 import "flatpickr/dist/themes/material_blue.css";
 import moment from "moment";
 import nanoid from 'nanoid';
+import debounce from 'lodash/debounce';
 
 const createDestinationsMarkup = (destinations) => {
   return destinations
@@ -166,6 +166,13 @@ export default class EventEdit extends AbstractSmartComponent {
     }
   }
 
+  _hasOffers() {
+    return this._offers
+      .find((offer) => {
+        return this._type === (offer.type);
+      }).offers.length !== 0;
+  }
+
   _getFormElement() {
     const {offers, isFavorite} = this._event;
     const {name, description, pictures} = this._destination;
@@ -243,6 +250,7 @@ export default class EventEdit extends AbstractSmartComponent {
           </header>
           ${this._isModeAdding() && description === `` ? `` : `
            <section class="event__details">
+           ${this._hasOffers() ? `
              <section class="event__section  event__section--offers">
                <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
@@ -250,7 +258,7 @@ export default class EventEdit extends AbstractSmartComponent {
                  ${offersMarkup}
                </div>
              </section>
-
+           ` : ``}
              <section class="event__section  event__section--destination">
                <h3 class="event__section-title  event__section-title--destination">Destination</h3>
                <p class="event__destination-description">${description}</p>
@@ -353,6 +361,7 @@ export default class EventEdit extends AbstractSmartComponent {
 
   rerender() {
     super.rerender();
+    this.recoveryListeners();
     this._applyFlatpickrs();
   }
 
@@ -385,7 +394,7 @@ export default class EventEdit extends AbstractSmartComponent {
     const element = this.getElement().querySelector(`.event__favorite-checkbox`);
 
     if (element) {
-      element.addEventListener(`change`, handler);
+      element.addEventListener(`change`, debounce(handler, DEBOUNCE_TIMEOUT));
     }
 
     this._favoriteClickHandler = handler;

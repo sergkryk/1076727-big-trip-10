@@ -1,5 +1,5 @@
-import AbstractSmartComponent from './abstract-smart-component.js';
-import {formatMonth, formatDay} from '../utils/format.js';
+import AbstractSmartComponent from './abstract-smart-component';
+import {formatMonth, formatDay} from '../utils/format';
 
 const SHOWING_CITIES_COUNT = 3;
 
@@ -43,8 +43,6 @@ export default class TripInfo extends AbstractSmartComponent {
        </div>
      `;
   }
-
-  recoveryListeners() {}
 
   rerender(events) {
     this._events = events.slice().sort((a, b) => a.startDate - b.startDate);

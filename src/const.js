@@ -1,12 +1,20 @@
+import nanoid from 'nanoid';
+
+const STORE_PREFIX = `bigtrip-localstorage`;
+const STORE_VER = `v1`;
+export const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
+
+export const AUTHORIZATION = `Basic ${nanoid()}`;
+export const END_POINT = `https://htmlacademy-es-10.appspot.com/big-trip`;
+
+export const DEBOUNCE_TIMEOUT = 500;
+
 export const RequestMethod = {
   GET: `GET`,
   POST: `POST`,
   PUT: `PUT`,
   DELETE: `DELETE`
 };
-
-export const AUTHORIZATION = `Basic Pn64vTMaYXczdwZ47yC8W`;
-export const END_POINT = `https://htmlacademy-es-10.appspot.com/big-trip`;
 
 export const EVENTS_COUNT = 5;
 
@@ -25,6 +33,19 @@ export const EVENT_TYPES = {
     `restaurant`,
     `sightseeing`
   ]
+};
+
+export const emojiMap = {
+  'bus': `🚌`,
+  'check-in': `🏨`,
+  'drive': `🚗`,
+  'flight': `✈️`,
+  'restaurant': `🍽️`,
+  'ship': `🚢`,
+  'sightseeing': `🏛️`,
+  'taxi': `🚕`,
+  'train': `🚂`,
+  'transport': `🚊`
 };
 
 export const CITIES = [
@@ -58,6 +79,8 @@ export const OFFERS = [
     price: 40
   }
 ];
+
+export const HIDDEN_CLASS = `visually-hidden`;
 
 export const MODE = {
   ADDING: `adding`,

@@ -1,11 +1,9 @@
-import AbstractComponent from './abstract-component.js';
-import {toUpperCaseFirstLetter} from '../utils/common.js';
+import AbstractComponent from './abstract-component';
+import {toUpperCaseFirstLetter} from '../utils/common';
 
 const BUTTON_ACTIVE_CLASS = `trip-tabs__btn--active`;
 
-const createMenuItemMarkup = ((item, isActive) => {
-  const {name} = item;
-
+const createMenuItemMarkup = ((name, isActive) => {
   return `<a class="trip-tabs__btn ${isActive ? BUTTON_ACTIVE_CLASS : ``}" href="#" data-item-type="${name}">
   ${toUpperCaseFirstLetter(name)}
     </a>
@@ -22,7 +20,7 @@ export default class SiteMenu extends AbstractComponent {
 
   getTemplate() {
     const menuItemsMarkup = this._items
-       .map((item) => createMenuItemMarkup(item, item.active))
+       .map(({name, active}) => createMenuItemMarkup(name, active))
        .join(``);
 
     return `<nav class="trip-controls__trip-tabs  trip-tabs">${menuItemsMarkup}</nav>`;
