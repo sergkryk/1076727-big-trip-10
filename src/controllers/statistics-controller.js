@@ -1,7 +1,7 @@
-import StatisticsComponent from '../components/statistics.js';
-import {EVENT_TYPES, ChartTitle} from '../const.js';
-import {renderElement} from '../utils/render.js';
-import {sortObject} from '../utils/common.js';
+import StatisticsComponent from '../components/statistics';
+import {EVENT_TYPES, ChartTitle, emojiMap} from '../const';
+import {renderElement} from '../utils/render';
+import {sortObject} from '../utils/common';
 import Chart from 'chart.js';
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import moment from "moment";
@@ -27,7 +27,7 @@ export default class StatisticsController {
     return {
       type: `horizontalBar`,
       data: {
-        labels: types.map((item) => item.toUpperCase()),
+        labels: types,
         datasets: [{
           data: types.map((type) => data[type]),
           backgroundColor: `rgba(21, 141, 235, 0.5)`,
@@ -81,7 +81,10 @@ export default class StatisticsController {
               display: false
             },
             ticks: {
-              fontSize: 14
+              fontSize: 14,
+              callback: (value) => {
+                return `${emojiMap[value]} ${value.toUpperCase()}`;
+              }
             }
           }]
         },

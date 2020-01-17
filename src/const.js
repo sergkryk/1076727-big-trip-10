@@ -35,6 +35,19 @@ export const EVENT_TYPES = {
   ]
 };
 
+export const emojiMap = {
+  'bus': `🚌`,
+  'check-in': `🏨`,
+  'drive': `🚗`,
+  'flight': `✈️`,
+  'restaurant': `🍽️`,
+  'ship': `🚢`,
+  'sightseeing': `🏛️`,
+  'taxi': `🚕`,
+  'train': `🚂`,
+  'transport': `🚊`
+};
+
 export const CITIES = [
   `Amsterdam`,
   `Rotterdam`,
@@ -66,6 +79,8 @@ export const OFFERS = [
     price: 40
   }
 ];
+
+export const HIDDEN_CLASS = `visually-hidden`;
 
 export const MODE = {
   ADDING: `adding`,

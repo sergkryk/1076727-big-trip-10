@@ -1,15 +1,15 @@
-import Api from './api/api.js';
-import Store from './api/store.js';
-import Provider from './api/provider.js';
-import TripController from './controllers/trip-controller.js';
-import FilterController from './controllers/filter-controller.js';
+import Api from './api/api';
+import Store from './api/store';
+import Provider from './api/provider';
+import TripController from './controllers/trip-controller';
+import FilterController from './controllers/filter-controller';
 import StatisticsController from './controllers/statistics-controller';
-import SiteMenuComponent from './components/menu.js';
-import LoadEvents from './components/load-events.js';
-import EventsModel from './models/events-model.js';
-import EventModel from './models/event-model.js';
-import {renderElement, removeElement, RenderPosition} from './utils/render.js';
-import {MenuItem, AUTHORIZATION, END_POINT, STORE_NAME} from './const.js';
+import SiteMenuComponent from './components/menu';
+import LoadEvents from './components/load-events';
+import EventsModel from './models/events-model';
+import EventModel from './models/event-model';
+import {renderElement, removeElement, RenderPosition} from './utils/render';
+import {MenuItem, AUTHORIZATION, END_POINT, STORE_NAME} from './const';
 
 
 const tripControlsElement = document.querySelector(`.trip-main__trip-controls`);
@@ -58,11 +58,13 @@ menuComponent.setItemClickHandler((menuItem) => {
   switch (menuItem) {
     case MenuItem.STATS:
       menuComponent.setActiveItem(MenuItem.STATS);
+      filterController.hide();
       tripController.hide();
       statisticsController.show();
       break;
     case MenuItem.TABLE:
       menuComponent.setActiveItem(MenuItem.TABLE);
+      filterController.show();
       statisticsController.hide();
       tripController.show();
       break;

@@ -1,6 +1,6 @@
-import AbstractComponent from './abstract-component.js';
-import {toUpperCaseFirstLetter} from '../utils/common.js';
-import {SORT_TYPE} from '../const.js';
+import AbstractComponent from './abstract-component';
+import {toUpperCaseFirstLetter} from '../utils/common';
+import {SORT_TYPE} from '../const';
 
 const createSortMarkup = (sortType) => {
   return Object.values(sortType)

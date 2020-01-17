@@ -1,14 +1,12 @@
-import {formatFullDate} from '../utils/format.js';
-import TripDayComponent from '../components/day.js';
-import TripInfoComponent from '../components/trip-info.js';
-import EventController from '../controllers/event-controller.js';
-import SortFormComponent from '../components/sort.js';
-import NoEventsComponent from '../components/no-events.js';
-import TripDaysListComponent from '../components/trip-days-list.js';
-import {renderElement, RenderPosition, removeElement} from '../utils/render.js';
-import {SORT_TYPE, MODE, EMPTY_EVENT} from '../const.js';
-
-const HIDDEN_CLASS = `visually-hidden`;
+import {formatFullDate} from '../utils/format';
+import TripDayComponent from '../components/day';
+import TripInfoComponent from '../components/trip-info';
+import EventController from '../controllers/event-controller';
+import SortFormComponent from '../components/sort';
+import NoEventsComponent from '../components/no-events';
+import TripDaysListComponent from '../components/trip-days-list';
+import {renderElement, RenderPosition, removeElement} from '../utils/render';
+import {SORT_TYPE, MODE, EMPTY_EVENT, HIDDEN_CLASS} from '../const';
 
 const renderEvents = (container, events, onDataChange, onViewChange, destinations, offers, isSorted = true) => {
   const eventControllers = [];
