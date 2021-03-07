@@ -21,5 +21,3 @@ render(tripEvents, createTripDaysTemplate(), 'beforeend');
 
 const tripDays = document.querySelector('.trip-days');
 render(tripDays, createTripDayTemplate(), 'afterbegin');
-
-
